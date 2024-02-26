@@ -1,0 +1,15 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!221 &22100000
+AnimatorOverrideController:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Electrisity
+  m_Controller: {fileID: 9100000, guid: 99516c8dab473164ab66bc9bcdb1fb81, type: 2}
+  m_Clips:
+  - m_OriginalClip: {fileID: 7400000, guid: 95766bedc7078214eb9bdf54b431c960, type: 2}
+    m_OverrideClip: {fileID: 7400000, guid: 24f6ba3230a5b8742ab36ed00379ac1d, type: 2}
+  - m_OriginalClip: {fileID: 7400000, guid: b850ec4d6cbb665489e319e5d1627fbc, type: 2}
+    m_OverrideClip: {fileID: 7400000, guid: 6b3da7d9909d7e14ca8e08a5a0c1eba8, type: 2}
