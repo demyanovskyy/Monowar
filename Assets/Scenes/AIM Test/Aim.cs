@@ -31,11 +31,17 @@ public class Aim : MonoBehaviour
     {
         foreach (Weapon weapon in _weapons)
         {
+            frize = true;
+
             if (weapon.weaponActiv == true)
             {
                 currentWeapon = weapon.gameObject;
+                frize = false;
+                return;
             }
         }
+
+        
     }
 
 
