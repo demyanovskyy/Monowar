@@ -18,6 +18,8 @@ public class Aim : MonoBehaviour
 
     public float armMinAngle = -40; // ограничение по углам
     public float armMaxAngle = 40;
+
+
     public float gunMinAngle = -10;
     public float gunMaxAngle = 10;
 
@@ -25,18 +27,20 @@ public class Aim : MonoBehaviour
 
     [HideInInspector]
     public Vector3 mousePosMain;
-    public bool frize = false;
+    public bool frizeRotateArm = false;
+    public bool frizeRotateGun = false;
 
+    public GameObject _Head;
     private void GetCurrentWeapon()
     {
         foreach (Weapon weapon in _weapons)
         {
-            frize = true;
+            frizeRotateArm = true;
 
             if (weapon.weaponActiv == true)
             {
                 currentWeapon = weapon.gameObject;
-                frize = false;
+                frizeRotateArm = false;
                 return;
             }
         }
@@ -77,28 +81,40 @@ public class Aim : MonoBehaviour
         mousePosMain = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         invert = Mathf.Sign(Parent.localScale.x);
 
-        if (frize)
+        if (frizeRotateArm)
         {
             armAngle = 0;
             Quaternion rotation = Quaternion.AngleAxis(armAngle * invert, Vector3.forward);
+            //currentWeapon.transform.rotation = Quaternion.Slerp(currentWeapon.transform.rotation, rotation, speed * Time.deltaTime);
             _arm.rotation = Quaternion.Slerp(_arm.rotation, rotation, speed * Time.deltaTime);
+            _Head.SetActive(false);
         }
         else
         {
             MouseControl();
+            _Head.SetActive(true);
         }
         FlipControl(mousePosMain);
     }
 
     public void GunRotateToMouse(Vector3 mPos, float inv)
     {
-        Vector2 gunDirection = mPos - currentWeapon.transform.position;
-        gunAngle = Mathf.Atan2(gunDirection.y, gunDirection.x * inv) * Mathf.Rad2Deg;
-        Quaternion gunRotation = Quaternion.AngleAxis(gunAngle * inv, Vector3.forward);
-        gunAngle = Mathf.Clamp(gunAngle, armAngle+gunMinAngle, armAngle+gunMaxAngle);
-        if (Mathf.Abs(gunDirection.x) > _minRotateGundistanceX && Mathf.Abs(gunDirection.y) < _minRotateGundistanceY)
-            currentWeapon.transform.rotation = Quaternion.Slerp(currentWeapon.transform.rotation, gunRotation, speed * Time.deltaTime);
+        if (frizeRotateGun)
+        {
+            Quaternion rotation = Quaternion.AngleAxis(armAngle * invert, Vector3.forward);
+            currentWeapon.transform.rotation = Quaternion.Slerp(currentWeapon.transform.rotation, rotation, speed * Time.deltaTime);
 
+        }
+        else
+        {
+  
+            Vector2 gunDirection = mPos - currentWeapon.transform.position;
+            gunAngle = Mathf.Atan2(gunDirection.y, gunDirection.x * inv) * Mathf.Rad2Deg;
+            Quaternion gunRotation = Quaternion.AngleAxis(gunAngle * inv, Vector3.forward);
+            gunAngle = Mathf.Clamp(gunAngle, armAngle + gunMinAngle, armAngle + gunMaxAngle);
+            if (Mathf.Abs(gunDirection.x) > _minRotateGundistanceX && Mathf.Abs(gunDirection.y) < _minRotateGundistanceY)
+                currentWeapon.transform.rotation = Quaternion.Slerp(currentWeapon.transform.rotation, gunRotation, speed * Time.deltaTime);
+        }
     }
 
 
@@ -109,8 +125,7 @@ public class Aim : MonoBehaviour
         armAngle = Mathf.Clamp(armAngle, armMinAngle, armMaxAngle);
         Quaternion rotation = Quaternion.AngleAxis(armAngle * inv, Vector3.forward);
         _arm.rotation = Quaternion.Slerp(_arm.rotation, rotation, speed * Time.deltaTime);
-
-
+ 
     }
 
     public void FlipControl(Vector3 mPos)

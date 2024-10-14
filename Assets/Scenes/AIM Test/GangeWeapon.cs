@@ -42,8 +42,10 @@ public class GangeWeapon : MonoBehaviour
             Rifle.weaponActiv = false;
 
             _anim.SetTrigger("meleeAttack");
+            _anim.GetComponentInParent<Aim>().frizeRotateArm = true;
 
         }
+ 
 
         if (Input.GetKeyDown(KeyCode.Keypad0))
         {
