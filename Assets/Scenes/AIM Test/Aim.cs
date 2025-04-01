@@ -1,53 +1,36 @@
 using UnityEngine;
+using static UnityEngine.LightAnchor;
 public class Aim : MonoBehaviour
 {
 
+    [SerializeField] private float _minRotateGundistanceX = 5f;
+    [SerializeField] private float _minRotateGundistanceY = 8f;
+    [SerializeField] private Transform _arm;
+    [SerializeField] private Transform Parent;
 
-    public Weapon[] _weapons;
-    private GameObject currentWeapon;
-    public float _minRotateGundistanceX = 5f;
-    public float _minRotateGundistanceY = 8f;
-    public Transform _arm;
-    public Transform Parent;
+    [SerializeField] private bool facingRight = true; 
+    
+    [SerializeField] private float speedRotateAim = 5f;
+    [SerializeField] private float speedRotateGun = 2f;
 
-    public bool facingRight = true; // направление на старте сцены, вправо?
-    private float invert;
-
-
-    public float speed = 5f;
-
-    public float armMinAngle = -40; // ограничение по углам
-    public float armMaxAngle = 40;
+    [SerializeField] private float armMinAngle = -40; 
+    [SerializeField] private float armMaxAngle = 40;
 
 
-    public float gunMinAngle = -10;
-    public float gunMaxAngle = 10;
+    [SerializeField] private float gunMinAngle = -10;
+    [SerializeField] private float gunMaxAngle = 10;
+
+     
+    [SerializeField] private bool frizeRotateArm = false;
+    [SerializeField] private bool frizeRotateGun = false;
+
+    [SerializeField] private GameObject _Head;
+
+    [SerializeField] private WeaponManager _weaponManager;
 
     private float armAngle, gunAngle;
-
-    [HideInInspector]
-    public Vector3 mousePosMain;
-    public bool frizeRotateArm = false;
-    public bool frizeRotateGun = false;
-
-    public GameObject _Head;
-    private void GetCurrentWeapon()
-    {
-        foreach (Weapon weapon in _weapons)
-        {
-            frizeRotateArm = true;
-
-            if (weapon.weaponActiv == true)
-            {
-                currentWeapon = weapon.gameObject;
-                frizeRotateArm = false;
-                return;
-            }
-        }
-
-        
-    }
-
+    private Vector3 mousePosMain;
+    private float invert;
 
     public float ReturnGunAngle()
     {
@@ -69,15 +52,18 @@ public class Aim : MonoBehaviour
 
     private void Start()
     {
-        currentWeapon = _weapons[0].gameObject;
-        
+  
         if (!facingRight) invert = -1; else invert = 1;
+    }
+
+    public void SetfrizeRotateArm(bool _fR)
+    {
+        frizeRotateArm = _fR;
     }
 
     private void Update()
     {
-        GetCurrentWeapon();
-
+        
         mousePosMain = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         invert = Mathf.Sign(Parent.localScale.x);
 
@@ -85,8 +71,7 @@ public class Aim : MonoBehaviour
         {
             armAngle = 0;
             Quaternion rotation = Quaternion.AngleAxis(armAngle * invert, Vector3.forward);
-            //currentWeapon.transform.rotation = Quaternion.Slerp(currentWeapon.transform.rotation, rotation, speed * Time.deltaTime);
-            _arm.rotation = Quaternion.Slerp(_arm.rotation, rotation, speed * Time.deltaTime);
+            _arm.rotation = Quaternion.Slerp(_arm.rotation, rotation, speedRotateAim * Time.deltaTime);
             _Head.SetActive(false);
         }
         else
@@ -97,37 +82,18 @@ public class Aim : MonoBehaviour
         FlipControl(mousePosMain);
     }
 
-    public void GunRotateToMouse(Vector3 mPos, float inv)
+    public void GunRotateToMouse(Transform V1, Vector3 V2, float min, float max, float _speed, float _parentAngle, float minDistX, float minDistY, bool friz, float inv)
     {
-        if (frizeRotateGun)
-        {
-            Quaternion rotation = Quaternion.AngleAxis(armAngle * invert, Vector3.forward);
-            currentWeapon.transform.rotation = Quaternion.Slerp(currentWeapon.transform.rotation, rotation, speed * Time.deltaTime);
+        gunAngle = Utility.RotateV1ToV2AddParamiters(V1, V2, min, max, _speed, _parentAngle, minDistX, minDistY, friz, inv);
+    }
 
-        }
-        else
-        {
+
+    public void ArmRotateToMouse(Transform V1, Vector3 V2, float min, float max, float speed, float inv)
+    {
+       armAngle = Utility.RotateV1ToV2(V1, V2, min, max, speed, inv);
+    }
+
   
-            Vector2 gunDirection = mPos - currentWeapon.transform.position;
-            gunAngle = Mathf.Atan2(gunDirection.y, gunDirection.x * inv) * Mathf.Rad2Deg;
-            Quaternion gunRotation = Quaternion.AngleAxis(gunAngle * inv, Vector3.forward);
-            gunAngle = Mathf.Clamp(gunAngle, armAngle + gunMinAngle, armAngle + gunMaxAngle);
-            if (Mathf.Abs(gunDirection.x) > _minRotateGundistanceX && Mathf.Abs(gunDirection.y) < _minRotateGundistanceY)
-                currentWeapon.transform.rotation = Quaternion.Slerp(currentWeapon.transform.rotation, gunRotation, speed * Time.deltaTime);
-        }
-    }
-
-
-    public void ArmRotateToMouse(Vector3 mPos, float inv)
-    {
-        Vector2 direction = mPos - _arm.position;
-        armAngle = Mathf.Atan2(direction.y, direction.x * inv) * Mathf.Rad2Deg;
-        armAngle = Mathf.Clamp(armAngle, armMinAngle, armMaxAngle);
-        Quaternion rotation = Quaternion.AngleAxis(armAngle * inv, Vector3.forward);
-        _arm.rotation = Quaternion.Slerp(_arm.rotation, rotation, speed * Time.deltaTime);
- 
-    }
-
     public void FlipControl(Vector3 mPos)
     {
         if (mPos.x < Parent.position.x && facingRight)
@@ -141,11 +107,27 @@ public class Aim : MonoBehaviour
     }
     public void MouseControl()
     {
-        ArmRotateToMouse(mousePosMain, invert);
-        GunRotateToMouse(mousePosMain, invert);
-        
+        ArmRotateToMouse(_arm,
+                         mousePosMain,
+                         armMinAngle,
+                         armMaxAngle,
+                         speedRotateAim,
+                         invert);
+
+        GunRotateToMouse(_weaponManager.ReturnCurrentWeapon().transform,
+                         mousePosMain,
+                         gunMinAngle,
+                         gunMaxAngle,
+                         speedRotateGun,
+                         armAngle,
+                         _minRotateGundistanceX,
+                         _minRotateGundistanceY,
+                         frizeRotateGun,
+                         invert);
+
+
     }
-    void Flip() // отражение по горизонтали
+    void Flip() 
     {
         facingRight = !facingRight;
         Vector3 theScale = Parent.localScale;

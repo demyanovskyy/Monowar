@@ -1,16 +1,13 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class GangeWeapon : MonoBehaviour
 {
     private Animator _anim;
 
-    public Weapon Pistol, Rifle, Gun;
+    [SerializeField] private WeaponManager _weaponManager;
 
-    public GameObject _primeParent;
-    public GameObject _Larm;
-    public GameObject _Rarm;
+    [SerializeField] private GameObject _Larm;
+    [SerializeField] private GameObject _Rarm;
     // Start is called before the first frame update
     void Start()
     {
@@ -19,9 +16,8 @@ public class GangeWeapon : MonoBehaviour
         _Larm.SetActive(false);
         _Rarm.SetActive(false);
 
-        Pistol.SetActive(false);
-        Rifle.SetActive(false);
-        Gun.SetActive(false);
+        _weaponManager.DeactivateAllWeapon();
+
     }
 
     // Update is called once per frame
@@ -33,34 +29,21 @@ public class GangeWeapon : MonoBehaviour
             _Larm.SetActive(false);
             _Rarm.SetActive(false);
 
-            Pistol.SetActive(false);
-            Rifle.SetActive(false);
-            Gun.SetActive(false);
-
-            Pistol.weaponActiv = false;
-            Gun.weaponActiv = false;
-            Rifle.weaponActiv = false;
+            _weaponManager.DeactivateAllWeapon();
 
             _anim.SetTrigger("meleeAttack");
-            _anim.GetComponentInParent<Aim>().frizeRotateArm = true;
+            _anim.GetComponentInParent<Aim>().SetfrizeRotateArm(true);
 
         }
- 
+
 
         if (Input.GetKeyDown(KeyCode.Keypad0))
         {
             _Larm.SetActive(false);
             _Rarm.SetActive(false);
 
-            Pistol.SetActive(false);
-            Rifle.SetActive(false);
-            Gun.SetActive(false);
-
-            Pistol.weaponActiv = false;
-            Gun.weaponActiv = false;
-            Rifle.weaponActiv = false;
-
-
+            _weaponManager.DeactivateAllWeapon();
+            _anim.GetComponentInParent<Aim>().SetfrizeRotateArm(true);
 
         }
 
@@ -69,15 +52,8 @@ public class GangeWeapon : MonoBehaviour
             _Larm.SetActive(false);
             _Rarm.SetActive(true);
 
-            Pistol.SetActive(true);
-            Rifle.SetActive(false);
-            Gun.SetActive(false);
-
-            Pistol.weaponActiv = true;
-            Gun.weaponActiv = false;
-            Rifle.weaponActiv = false;
-
-           
+            _weaponManager.ActivateWeapon(TypeOfWeapon.Pistol);
+            _anim.GetComponentInParent<Aim>().SetfrizeRotateArm(false);
 
         }
 
@@ -86,31 +62,18 @@ public class GangeWeapon : MonoBehaviour
             _Larm.SetActive(true);
             _Rarm.SetActive(true);
 
-            Pistol.SetActive(false);
-            Rifle.SetActive(true);
-            Gun.SetActive(false);
+            _weaponManager.ActivateWeapon(TypeOfWeapon.Rifle);
+            _anim.GetComponentInParent<Aim>().SetfrizeRotateArm(false);
 
-            Pistol.weaponActiv = false;
-            Rifle.weaponActiv = true;
-            Gun.weaponActiv = false;
-           
         }
         if (Input.GetKeyDown(KeyCode.Keypad3))
         {
             _Larm.SetActive(true);
             _Rarm.SetActive(true);
 
-            Pistol.SetActive(false);
-            Rifle.SetActive(false);
-            Gun.SetActive(true);
+            _weaponManager.ActivateWeapon(TypeOfWeapon.ShotGun);
+            _anim.GetComponentInParent<Aim>().SetfrizeRotateArm(false);
 
-            Pistol.weaponActiv = false;
-            Rifle.weaponActiv = false;
-            Gun.weaponActiv = true;
-
-            
         }
-
-
     }
-    }
+}

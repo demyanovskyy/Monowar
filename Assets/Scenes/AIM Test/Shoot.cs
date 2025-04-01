@@ -2,21 +2,21 @@ using System.Collections;
 using UnityEngine;
 public class Shoot : MonoBehaviour
 {
-    [SerializeField] Transform _shootPoint;
+    [SerializeField] private Transform _shootPoint;
     
-    [SerializeField] Bullet _bulletPrefab;
-    public Transform _parent;
+    [SerializeField] private Bullet _bulletPrefab;
+    [SerializeField] private Transform _parent;
   
-    public GameObject MuzleFlash;
+    [SerializeField] private GameObject MuzleFlash;
     [Range(0, 5)]
-    public int framToFlash = 1;
-    bool flashing = false;
+    [SerializeField] private int framToFlash = 1;
+    [SerializeField] private bool flashing = false;
 
     
-
-    public Transform _gunBody;
-    public float _deltaX = -0.2f;
-    public float _speedReturn = 2f;
+    //Animation fidback gun(arm)
+    [SerializeField] private Transform _gunBody;
+    [SerializeField] private float _deltaX = -0.2f;
+    [SerializeField] private float _speedReturn = 2f;
     private Vector2 _gunBodyTempPos;
 
 
