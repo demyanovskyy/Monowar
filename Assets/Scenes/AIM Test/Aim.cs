@@ -1,5 +1,6 @@
+using System.Net;
+using UnityEditor;
 using UnityEngine;
-using static UnityEngine.LightAnchor;
 public class Aim : MonoBehaviour
 {
 
@@ -8,19 +9,19 @@ public class Aim : MonoBehaviour
     [SerializeField] private Transform _arm;
     [SerializeField] private Transform Parent;
 
-    [SerializeField] private bool facingRight = true; 
-    
+    [SerializeField] private bool facingRight = true;
+
     [SerializeField] private float speedRotateAim = 5f;
     [SerializeField] private float speedRotateGun = 2f;
 
-    [SerializeField] private float armMinAngle = -40; 
+    [SerializeField] private float armMinAngle = -40;
     [SerializeField] private float armMaxAngle = 40;
 
 
     [SerializeField] private float gunMinAngle = -10;
     [SerializeField] private float gunMaxAngle = 10;
 
-     
+
     [SerializeField] private bool frizeRotateArm = false;
     [SerializeField] private bool frizeRotateGun = false;
 
@@ -30,9 +31,10 @@ public class Aim : MonoBehaviour
 
     private float armAngle, gunAngle;
     private Vector3 mousePosMain;
-    private float invert;
+    private float viewDirection;
 
-    public float ReturnGunAngle()
+
+     public float ReturnGunAngle()
     {
         return armAngle;
     }
@@ -47,13 +49,13 @@ public class Aim : MonoBehaviour
     {
         mousePosMain = new Vector3(0, 0, -Camera.main.transform.position.z);
         facingRight = true;
-        if (!facingRight) invert = -1; else invert = 1;
+        if (!facingRight) viewDirection = -1; else viewDirection = 1;
     }
 
     private void Start()
     {
-  
-        if (!facingRight) invert = -1; else invert = 1;
+
+        if (!facingRight) viewDirection = -1; else viewDirection = 1;
     }
 
     public void SetfrizeRotateArm(bool _fR)
@@ -63,14 +65,14 @@ public class Aim : MonoBehaviour
 
     private void Update()
     {
-        
+
         mousePosMain = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-        invert = Mathf.Sign(Parent.localScale.x);
+        viewDirection = Mathf.Sign(Parent.localScale.x);
 
         if (frizeRotateArm)
         {
             armAngle = 0;
-            Quaternion rotation = Quaternion.AngleAxis(armAngle * invert, Vector3.forward);
+            Quaternion rotation = Quaternion.AngleAxis(armAngle * viewDirection, Vector3.forward);
             _arm.rotation = Quaternion.Slerp(_arm.rotation, rotation, speedRotateAim * Time.deltaTime);
             _Head.SetActive(false);
         }
@@ -90,10 +92,10 @@ public class Aim : MonoBehaviour
 
     public void ArmRotateToMouse(Transform V1, Vector3 V2, float min, float max, float speed, float inv)
     {
-       armAngle = Utility.RotateV1ToV2(V1, V2, min, max, speed, inv);
+        armAngle = Utility.RotateV1ToV2(V1, V2, min, max, speed, inv);
     }
 
-  
+
     public void FlipControl(Vector3 mPos)
     {
         if (mPos.x < Parent.position.x && facingRight)
@@ -112,7 +114,7 @@ public class Aim : MonoBehaviour
                          armMinAngle,
                          armMaxAngle,
                          speedRotateAim,
-                         invert);
+                         viewDirection);
 
         GunRotateToMouse(_weaponManager.ReturnCurrentWeapon().transform,
                          mousePosMain,
@@ -123,19 +125,59 @@ public class Aim : MonoBehaviour
                          _minRotateGundistanceX,
                          _minRotateGundistanceY,
                          frizeRotateGun,
-                         invert);
+                         viewDirection);
 
 
     }
-    void Flip() 
+    void Flip()
     {
         facingRight = !facingRight;
         Vector3 theScale = Parent.localScale;
         theScale.x *= -1;
-        invert *= -1;
+        viewDirection *= -1;
         Parent.localScale = theScale;
     }
 
 
+
+
+/*
+#if UNITY_EDITOR
+    private void OnDrawGizmosSelected()
+    {
+        Vector3 angeMin, angeMax;
+        float radius = 6f;
+        float deltaAngle = -90;
+
+        if (viewDirection > 0)
+        {
+            angeMin = DerectionFromAngle(0, -deltaAngle - armMinAngle);
+            angeMax = DerectionFromAngle(0, -deltaAngle - armMaxAngle);
+        }
+        else
+        {
+            angeMin = DerectionFromAngle(180, -deltaAngle + armMinAngle);
+            angeMax = DerectionFromAngle(180, -deltaAngle + armMaxAngle);
+        }
+
+
+        Gizmos.color = Color.magenta;
+        Gizmos.DrawLine(_arm.position, _arm.position + angeMin * radius);
+        Gizmos.color = Color.blue;
+        Gizmos.DrawLine(_arm.position, _arm.position + angeMax * radius);
+
+
+    }
+
+
+    private Vector2 DerectionFromAngle(float eulerY, float angleInDegrees)
+    {
+        angleInDegrees += eulerY;
+
+        return new Vector2(Mathf.Sin(angleInDegrees * Mathf.Deg2Rad), Mathf.Cos(angleInDegrees * Mathf.Deg2Rad));
+    }
+
+#endif
+*/
 
 }
