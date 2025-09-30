@@ -2,20 +2,10 @@
 %TAG !u! tag:unity3d.com,2011:
 --- !u!78 &1
 TagManager:
-  serializedVersion: 2
+  serializedVersion: 3
   tags:
-  - Enemy
-  - Boss
-  - EnemyBullet
-  - EnemyNEW
   - PlayerBullet
-  - PlayerShootPoint
-  - Saw
-  - EnemyShield
-  - Platform
   - Projectile
-  - 'AutoSpikes '
-  - Elevator
   layers:
   - Default
   - TransparentFX
@@ -24,22 +14,22 @@ TagManager:
   - Water
   - UI
   - Ground
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
+  - Player
+  - Enemy
+  - CameraEdge
+  - Laders
+  - PlayerStats
+  - DamagePlayer
+  - SpawnCheckPoint
+  - MiniMap
+  - WithGround
+  - PickUp
+  - EnemyStats
+  - EnemyProjectils
+  - Interact
+  - NPC
+  - Wall
+  - PlayerProjectils
   - 
   - 
   - 
@@ -53,6 +43,23 @@ TagManager:
   - name: Default
     uniqueID: 0
     locked: 0
-  - name: BG
-    uniqueID: 3526032709
+  - name: BackGround
+    uniqueID: 3618838893
     locked: 0
+  - name: Ground
+    uniqueID: 3626811719
+    locked: 0
+  - name: Player
+    uniqueID: 1677164201
+    locked: 0
+  - name: Enemy
+    uniqueID: 2295953817
+    locked: 0
+  - name: NPC
+    uniqueID: 359723897
+    locked: 0
+  - name: UI
+    uniqueID: 2258642675
+    locked: 0
+  m_RenderingLayers:
+  - Default
