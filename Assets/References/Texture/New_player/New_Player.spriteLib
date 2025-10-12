@@ -1,0 +1,81 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &1
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a5e6fedc2472449cead18ef23b5cb30d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Library:
+  - m_Name: Head
+    m_Hash: 130111906
+    m_CategoryList: []
+    m_OverrideEntries:
+    - m_Name: Head2
+      m_Hash: 571129232
+      m_Sprite: {fileID: -5211395068893253127, guid: f0628bb3798907042867d5a521f2cec9, type: 3}
+      m_FromMain: 0
+      m_SpriteOverride: {fileID: -5211395068893253127, guid: f0628bb3798907042867d5a521f2cec9, type: 3}
+    - m_Name: Head1
+      m_Hash: 990112810
+      m_Sprite: {fileID: 8422047388361021203, guid: f0628bb3798907042867d5a521f2cec9, type: 3}
+      m_FromMain: 0
+      m_SpriteOverride: {fileID: 8422047388361021203, guid: f0628bb3798907042867d5a521f2cec9, type: 3}
+    m_FromMain: 0
+    m_EntryOverrideCount: 2
+  - m_Name: HendR
+    m_Hash: 618961909
+    m_CategoryList: []
+    m_OverrideEntries:
+    - m_Name: HendL4
+      m_Hash: 709150447
+      m_Sprite: {fileID: -2529320681869906588, guid: f0628bb3798907042867d5a521f2cec9, type: 3}
+      m_FromMain: 0
+      m_SpriteOverride: {fileID: -2529320681869906588, guid: f0628bb3798907042867d5a521f2cec9, type: 3}
+    - m_Name: HendR1
+      m_Hash: 242159039
+      m_Sprite: {fileID: -8776587234440314078, guid: f0628bb3798907042867d5a521f2cec9, type: 3}
+      m_FromMain: 0
+      m_SpriteOverride: {fileID: -8776587234440314078, guid: f0628bb3798907042867d5a521f2cec9, type: 3}
+    - m_Name: HendR2
+      m_Hash: 392584197
+      m_Sprite: {fileID: 4990077598684919870, guid: f0628bb3798907042867d5a521f2cec9, type: 3}
+      m_FromMain: 0
+      m_SpriteOverride: {fileID: 4990077598684919870, guid: f0628bb3798907042867d5a521f2cec9, type: 3}
+    - m_Name: HendR3
+      m_Hash: 543255699
+      m_Sprite: {fileID: 6503238955419964978, guid: f0628bb3798907042867d5a521f2cec9, type: 3}
+      m_FromMain: 0
+      m_SpriteOverride: {fileID: 6503238955419964978, guid: f0628bb3798907042867d5a521f2cec9, type: 3}
+    m_FromMain: 0
+    m_EntryOverrideCount: 4
+  - m_Name: HendL
+    m_Hash: 518760086
+    m_CategoryList: []
+    m_OverrideEntries:
+    - m_Name: HendL1
+      m_Hash: 439235168
+      m_Sprite: {fileID: -1697124742342716922, guid: f0628bb3798907042867d5a521f2cec9, type: 3}
+      m_FromMain: 0
+      m_SpriteOverride: {fileID: -1697124742342716922, guid: f0628bb3798907042867d5a521f2cec9, type: 3}
+    - m_Name: HendL2
+      m_Hash: 52913114
+      m_Sprite: {fileID: -1257875243498230054, guid: f0628bb3798907042867d5a521f2cec9, type: 3}
+      m_FromMain: 0
+      m_SpriteOverride: {fileID: -1257875243498230054, guid: f0628bb3798907042867d5a521f2cec9, type: 3}
+    - m_Name: HendL3
+      m_Hash: 874533708
+      m_Sprite: {fileID: 75965779134435015, guid: f0628bb3798907042867d5a521f2cec9, type: 3}
+      m_FromMain: 0
+      m_SpriteOverride: {fileID: 75965779134435015, guid: f0628bb3798907042867d5a521f2cec9, type: 3}
+    m_FromMain: 0
+    m_EntryOverrideCount: 3
+  m_PrimaryLibraryGUID: 
+  m_ModificationHash: 638794834038059752
+  m_Version: 1

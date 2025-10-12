@@ -1,0 +1,29 @@
+using Unity.VisualScripting;
+using UnityEngine;
+
+public class EnemeMeleeDamagePlayer : MonoBehaviour
+{
+    [Header("Damage Setings")]
+    [SerializeField] private float damage;
+
+    [Header("KnockBack Setings")]
+    [SerializeField] private float knockBackDuration;
+    [SerializeField] private Vector2 knockBackForce;
+    private int pushDirection = 1;
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        KnockBackAbility knockBackAbility = collision.GetComponentInParent<KnockBackAbility>();
+
+        if (transform.position.x > collision.transform.position.x)
+            pushDirection = -1;
+        else
+        if (transform.position.x < collision.transform.position.x)
+            pushDirection = 1;
+
+        knockBackAbility.StartSwingKnockBack(knockBackDuration, knockBackForce, pushDirection);
+
+        collision.GetComponent<PlayerStats>().DamagePlayer(damage);
+    }
+
+}
