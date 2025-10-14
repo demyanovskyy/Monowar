@@ -3,23 +3,22 @@ using UnityEngine;
 
 public class EnemyRangeShootAbility : BaseAbilityEnemy
 {
-    private string shootAnimParamiterName = "Shoot";
+    private string shootAnimParamiterName = "Idle";
     private int shootParamiterID;
 
-    [SerializeField] private LineRenderer lineRenderer;
-    [SerializeField] private float rayLength;
-    [SerializeField] private float damage;
-    [SerializeField] private float shootCooldown;
-    [SerializeField] private float visibleLineTime;
-    [SerializeField] private Transform shootingPoint;
-    [SerializeField] private GameObject hitEffectPrefab;
-    [SerializeField] private LayerMask whatToHit;
+    [SerializeField] private float shootTime;
+
+    [SerializeField] private EnemyWeapon currentWeapon;
+
+    private bool shootCooldownOver = true;
+
+    private float shootCooldown;
 
     public void EndOfAttack()
     {
         if (linkedPhysics.playerAhead)
         {
-            linkedAnimator.Play(shootParamiterID, 0, 0);
+            linkedStateMachine.ChangeState((int)EnemyStates.State.Shoot);
         }
         else
         {
@@ -32,39 +31,56 @@ public class EnemyRangeShootAbility : BaseAbilityEnemy
 
     public void Shoot()
     {
-        RaycastHit2D hitInfo = Physics2D.Raycast(shootingPoint.position, transform.right, rayLength, whatToHit);
-        lineRenderer.positionCount = 2;
-        if (hitInfo)
+
+        //Check Ammo
+        if (currentWeapon.curentAmmo <= 0 || currentWeapon.isReloading)
+            return;
+
+        // Play Sound SFX
+        currentWeapon.audioSours.PlayOneShot(currentWeapon.audioClip);
+
+        // Instantiate Shell
+        IsPooleble s = ServiceLocator.Current.Get<LevelManager>().objectPoole.GetObject(currentWeapon.shellPrefab);
+        s.GetComponent<Shell>().SetParamiter(currentWeapon.shellSpawnPoint.position, currentWeapon.transform.rotation);
+
+        //Collback weapon
+        currentWeapon.defaultWeaponVectorPos.localPosition = currentWeapon.tempPosColbackWeaponPos - Vector3.right * currentWeapon.recoilStrenght;
+
+        // Instatiate Bullet
+        EnemyBullet bullet = ServiceLocator.Current.Get<LevelManager>().objectPoole.GetObject(currentWeapon._bulletPrefab);
+        bullet.SetParamiter(currentWeapon._shootPoint.position, currentWeapon._shootPoint.rotation);
+        bullet.BulletMove();
+
+
+        // particle flash
+        if (currentWeapon.flashingParticle)
         {
-            lineRenderer.SetPosition(0, shootingPoint.position);
-            lineRenderer.SetPosition(1, hitInfo.point);
-
-            
-            Vector2 normal = hitInfo.normal;
-            float angle = Mathf.Atan2(normal.y, normal.x) * Mathf.Rad2Deg;
-            Quaternion rotation = Quaternion.Euler(0, 0, angle);
-            Instantiate(hitEffectPrefab, hitInfo.point, rotation);
-
-
-            PlayerStats playerStats = hitInfo.collider.GetComponent<PlayerStats>();
-            if (playerStats != null)
+            for (int i = 0; i < currentWeapon.particles.Count; i++)
             {
-                playerStats.DamagePlayer(damage);
+                currentWeapon.particles[i].Play();
             }
         }
-        else
+        // sprite flash
+        if (currentWeapon.flashingSprite)
         {
-            lineRenderer.SetPosition(0, shootingPoint.position);
-            lineRenderer.SetPosition(1, shootingPoint.position + transform.right * 20);
+            StartCoroutine(currentWeapon.FlashTime());
         }
 
-        StartCoroutine(ResetShootLine());
-    }
+        currentWeapon.curentAmmo -= 1;
 
-    private IEnumerator ResetShootLine()
+        StartCoroutine(ShootDelay());
+
+
+    }
+    private IEnumerator ShootDelay()
     {
-        yield return new WaitForSeconds(visibleLineTime);
-        lineRenderer.positionCount = 0;
+        shootCooldownOver = false;
+        yield return new WaitForSeconds(currentWeapon.recoilTime);
+        //Collback weapon
+        currentWeapon.defaultWeaponVectorPos.localPosition = currentWeapon.tempPosColbackWeaponPos;
+
+        yield return new WaitForSeconds(currentWeapon.shootCooldown - currentWeapon.recoilTime);
+        shootCooldownOver = true;
     }
 
 
@@ -86,6 +102,8 @@ public class EnemyRangeShootAbility : BaseAbilityEnemy
     {
         linkedPhysics.ResetVelocity();
         linkedPhysics.canCheckBehind = false;
+
+        shootCooldown = shootTime;
     }
 
     public override void ProcessFixedAbility()
@@ -98,6 +116,23 @@ public class EnemyRangeShootAbility : BaseAbilityEnemy
         if (!isParamited)
             return;
 
+
+        shootCooldown -= Time.deltaTime;
+
+        if (currentWeapon != null)
+            if (currentWeapon.weaponType != TypeOfWeapon.Heand)
+            {
+                if (currentWeapon.isAvtomatic && shootCooldownOver)
+                {
+                    Shoot();
+                }
+            }
+
+        if (shootCooldown <= 0)
+        {
+            linkedStateMachine.ChangeState((int)EnemyStates.State.Idle);
+        }
+
     }
 
     public override void UpdateAnimator()
@@ -105,3 +140,15 @@ public class EnemyRangeShootAbility : BaseAbilityEnemy
         linkedAnimator.SetBool(shootParamiterID, linkedStateMachine.curentState == (int)EnemyStates.State.Shoot);
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+

@@ -20,7 +20,7 @@ AnimatorState:
   m_MirrorParameterActive: 0
   m_CycleOffsetParameterActive: 0
   m_TimeParameterActive: 0
-  m_Motion: {fileID: 7400000, guid: 857ec9d5d6ffc8b498bd2ad4abc4146b, type: 2}
+  m_Motion: {fileID: 7400000, guid: b6cd26fd6a8a36943980ddd0b95a05ac, type: 2}
   m_Tag: 
   m_SpeedParameter: 
   m_MirrorParameter: 
@@ -71,7 +71,7 @@ AnimatorState:
   m_MirrorParameterActive: 0
   m_CycleOffsetParameterActive: 0
   m_TimeParameterActive: 0
-  m_Motion: {fileID: 7400000, guid: 1ce72af079b240244a1f424275a61774, type: 2}
+  m_Motion: {fileID: 7400000, guid: de67ab8540175354a8c46128e332837b, type: 2}
   m_Tag: 
   m_SpeedParameter: 
   m_MirrorParameter: 
@@ -122,7 +122,7 @@ AnimatorState:
   m_MirrorParameterActive: 0
   m_CycleOffsetParameterActive: 0
   m_TimeParameterActive: 0
-  m_Motion: {fileID: 7400000, guid: 7ebecdaf3829a1042980c07ecb3014cc, type: 2}
+  m_Motion: {fileID: 7400000, guid: c2c80fe40627eb048a1e6fdc2ee82351, type: 2}
   m_Tag: 
   m_SpeedParameter: 
   m_MirrorParameter: 
@@ -159,7 +159,7 @@ AnimatorController:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Demon
+  m_Name: Enemy2
   serializedVersion: 5
   m_AnimatorParameters:
   - m_Name: Idle
@@ -225,7 +225,7 @@ AnimatorState:
   m_MirrorParameterActive: 0
   m_CycleOffsetParameterActive: 0
   m_TimeParameterActive: 0
-  m_Motion: {fileID: 7400000, guid: 7696e3c0317c4a143a035185f9fd54e6, type: 2}
+  m_Motion: {fileID: 7400000, guid: 463fd1f36733e21489699443cbee806a, type: 2}
   m_Tag: 
   m_SpeedParameter: 
   m_MirrorParameter: 
@@ -276,7 +276,7 @@ AnimatorState:
   m_MirrorParameterActive: 0
   m_CycleOffsetParameterActive: 0
   m_TimeParameterActive: 0
-  m_Motion: {fileID: 7400000, guid: 1ce72af079b240244a1f424275a61774, type: 2}
+  m_Motion: {fileID: 7400000, guid: de67ab8540175354a8c46128e332837b, type: 2}
   m_Tag: 
   m_SpeedParameter: 
   m_MirrorParameter: 
@@ -289,7 +289,7 @@ AnimatorStateMachine:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Base Layer
+  m_Name: Shoot
   m_ChildStates:
   - serializedVersion: 1
     m_State: {fileID: -8086684783813556424}

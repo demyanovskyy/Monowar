@@ -24,9 +24,12 @@ public class EnemyRangeMoveAbility : BaseAbilityEnemy
     {
         if (linkedPhysics.canCheckBehind)
         {
-            enemy.ForceFlip();
-            moveSpeed *= -1;
-            turnCooldown = minimumTurnDelay;
+            if (linkedPhysics.playerBehind && turnCooldown <= 0)
+            {
+                enemy.ForceFlip();
+                moveSpeed *= -1;
+                turnCooldown = minimumTurnDelay;
+            }
         }
 
         moveStartTime = Random.Range(minMoveTime, maxMoveTime);
@@ -71,10 +74,11 @@ public class EnemyRangeMoveAbility : BaseAbilityEnemy
             turnCooldown = minimumTurnDelay;
         }
 
-        //if (linkedPhysics.inAttackRange)
-        //{
-        //    linkedStateMachine.ChangeState((int)EnemyStates.State.MeleeAttak);
-        //}
+        if (linkedPhysics.inAttackRange)
+        {
+            linkedStateMachine.ChangeState((int)EnemyStates.State.MeleeAttak);
+        }
+        else
         if (linkedPhysics.playerAhead)
         {
             linkedStateMachine.ChangeState((int)EnemyStates.State.Shoot);

@@ -60,6 +60,8 @@ public class EnemyPhysicsControl : MonoBehaviour
 
     [SerializeField] private LayerMask playerDetectMask;
 
+
+
  
     public void ActivatedAttackCollider()
     {

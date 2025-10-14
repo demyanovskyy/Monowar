@@ -38,14 +38,14 @@ public class EnemyRangeIdleAbilyty : BaseAbilityEnemy
             linkedStateMachine.ChangeState((int)EnemyStates.State.Move);
         }
 
-        //if (linkedPhysics.inAttackRange)
-        //{
-        //    linkedStateMachine.ChangeState((int)EnemyStates.State.MeleeAttak);
-        //}
-
+        if (linkedPhysics.inAttackRange)
+        {
+            linkedStateMachine.ChangeState((int)EnemyStates.State.MeleeAttak);
+        }
+        else
         if (linkedPhysics.playerAhead)
         {
-           linkedStateMachine.ChangeState((int)EnemyStates.State.Shoot);
+            linkedStateMachine.ChangeState((int)EnemyStates.State.Shoot);
         }
     }
 
@@ -53,5 +53,4 @@ public class EnemyRangeIdleAbilyty : BaseAbilityEnemy
     {
         linkedAnimator.SetBool(idleParamiterID, linkedStateMachine.curentState == (int)EnemyStates.State.Idle);
     }
-
 }
