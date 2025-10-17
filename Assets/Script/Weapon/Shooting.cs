@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -131,9 +131,10 @@ public class Shooting : MonoBehaviour
         shootCooldownOver = false;
         yield return new WaitForSeconds(currentWeapon.recoilTime);
         //Collback weapon
-        currentWeapon.defaultWeaponVectorPos.localPosition = currentWeapon.tempPosColbackWeaponPos;
+        // currentWeapon.defaultWeaponVectorPos.localPosition = currentWeapon.tempPosColbackWeaponPos;
 
         yield return new WaitForSeconds(currentWeapon.shootCooldown - currentWeapon.recoilTime);
+
         shootCooldownOver = true;
     }
 
@@ -146,8 +147,9 @@ public class Shooting : MonoBehaviour
                 {
                     Shoot();
                 }
-            }
 
+                currentWeapon.defaultWeaponVectorPos.localPosition = Vector2.Lerp(currentWeapon.defaultWeaponVectorPos.localPosition, currentWeapon.tempPosColbackWeaponPos, currentWeapon.armRecoil * Time.deltaTime);
+            }
     }
 
 }

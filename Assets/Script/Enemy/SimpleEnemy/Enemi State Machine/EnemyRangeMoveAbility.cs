@@ -79,7 +79,7 @@ public class EnemyRangeMoveAbility : BaseAbilityEnemy
             linkedStateMachine.ChangeState((int)EnemyStates.State.MeleeAttak);
         }
         else
-        if (linkedPhysics.playerAhead)
+        if (enemy.fieldOfViev.targetInSight)
         {
             linkedStateMachine.ChangeState((int)EnemyStates.State.Shoot);
         }

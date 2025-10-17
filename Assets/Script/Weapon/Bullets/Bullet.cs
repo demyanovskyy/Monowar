@@ -20,7 +20,7 @@ public class Bullet : MonoBehaviour, IPoolable
 
     private IEnumerator OestroyCorutine()
     {
-        yield return new WaitForSeconds(0.5f);
+        yield return new WaitForSeconds(1.5f);
         OnDestroyed();
     }
     public void Reset()

@@ -18,6 +18,10 @@ public class EnemiDeathAbility : BaseAbilityEnemy
         
         linkedPhysics.DeathColliderDeactivation();
 
+        //=======================================
+        enemy.DeactivateRotateobject();
+        enemy.DeactivateFoV();
+
     }
 
     public override void ProcessAbility()

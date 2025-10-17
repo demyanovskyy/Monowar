@@ -43,6 +43,8 @@ public class Weapon : MonoBehaviour
     [Header("Recoil")]
     public float recoilStrenght;
     public float recoilTime;// it needs to be less that "shootCooldown"
+    public float armRecoil = 1.5f;
+
     public Vector3 tempPosColbackWeaponPos;
     public Transform defaultWeaponVectorPos;
 

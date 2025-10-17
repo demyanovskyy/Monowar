@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using UnityEngine;
 
 public class EnemyRangeShootAbility : BaseAbilityEnemy
@@ -10,22 +10,31 @@ public class EnemyRangeShootAbility : BaseAbilityEnemy
 
     [SerializeField] private EnemyWeapon currentWeapon;
 
+
     private bool shootCooldownOver = true;
 
     private float shootCooldown;
 
-    public void EndOfAttack()
-    {
-        if (linkedPhysics.playerAhead)
-        {
-            linkedStateMachine.ChangeState((int)EnemyStates.State.Shoot);
-        }
-        else
-        {
-            linkedStateMachine.ChangeState((int)EnemyStates.State.Idle);
-        }
+    //public void EndOfAttack()
+    //{
+    //    if (enemy.fieldOfViev.targetInSight)
+    //    {
+    //        linkedStateMachine.ChangeState((int)EnemyStates.State.Shoot);
+    //    }
+    //    else
+    //    {
+    //        linkedStateMachine.ChangeState((int)EnemyStates.State.Idle);
+    //    }
 
-        StartCoroutine(CheckBehindDelay());
+    //    StartCoroutine(CheckBehindDelay());
+
+    //}
+
+    public override void ExitAbility()
+    {
+
+        linkedPhysics.canCheckBehind = true;
+
 
     }
 
@@ -45,6 +54,7 @@ public class EnemyRangeShootAbility : BaseAbilityEnemy
 
         //Collback weapon
         currentWeapon.defaultWeaponVectorPos.localPosition = currentWeapon.tempPosColbackWeaponPos - Vector3.right * currentWeapon.recoilStrenght;
+
 
         // Instatiate Bullet
         EnemyBullet bullet = ServiceLocator.Current.Get<LevelManager>().objectPoole.GetObject(currentWeapon._bulletPrefab);
@@ -77,9 +87,10 @@ public class EnemyRangeShootAbility : BaseAbilityEnemy
         shootCooldownOver = false;
         yield return new WaitForSeconds(currentWeapon.recoilTime);
         //Collback weapon
-        currentWeapon.defaultWeaponVectorPos.localPosition = currentWeapon.tempPosColbackWeaponPos;
+        //currentWeapon.defaultWeaponVectorPos.localPosition = currentWeapon.tempPosColbackWeaponPos;
 
         yield return new WaitForSeconds(currentWeapon.shootCooldown - currentWeapon.recoilTime);
+
         shootCooldownOver = true;
     }
 
@@ -116,8 +127,11 @@ public class EnemyRangeShootAbility : BaseAbilityEnemy
         if (!isParamited)
             return;
 
+        if (enemy.fieldOfViev.targetInSight)
+        {
+            shootCooldown -= Time.deltaTime;
 
-        shootCooldown -= Time.deltaTime;
+        }
 
         if (currentWeapon != null)
             if (currentWeapon.weaponType != TypeOfWeapon.Heand)
@@ -128,11 +142,21 @@ public class EnemyRangeShootAbility : BaseAbilityEnemy
                 }
             }
 
-        if (shootCooldown <= 0)
+        if (enemy.fieldOfViev.targetInSight == false)
         {
             linkedStateMachine.ChangeState((int)EnemyStates.State.Idle);
         }
 
+        if (shootCooldown <= 0)
+        {
+            if (enemy.fieldOfViev.targetInSight)
+                linkedStateMachine.ChangeState((int)EnemyStates.State.Shoot);
+            else
+                linkedStateMachine.ChangeState((int)EnemyStates.State.Move);
+        }
+
+        if (currentWeapon != null)
+            currentWeapon.defaultWeaponVectorPos.localPosition = Vector2.Lerp(currentWeapon.defaultWeaponVectorPos.localPosition, currentWeapon.tempPosColbackWeaponPos, currentWeapon.armRecoil * Time.deltaTime);
     }
 
     public override void UpdateAnimator()

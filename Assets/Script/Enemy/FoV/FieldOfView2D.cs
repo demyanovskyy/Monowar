@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 
 [RequireComponent(typeof(MeshFilter), typeof(MeshRenderer))]
-public class FieldOfViewAI : MonoBehaviour
+public class FieldOfView2D : MonoBehaviour
 {
     [Header("Parent")]
     [SerializeField] Enemy parent;
