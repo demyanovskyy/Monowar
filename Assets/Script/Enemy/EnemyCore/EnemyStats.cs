@@ -15,6 +15,11 @@ public class EnemyStats : MonoBehaviour
     private Material defaultMatirial;
     [SerializeField] GameObject gafic;
     private SpriteRenderer[] spriteRenderer;
+    private bool canTakeDamage = true;
+
+    [Header("StatsColliders")]
+    [SerializeField] private Collider2D statsCollider;
+
 
     protected Coroutine damageCorutine;
     private Material flashMatirialInstance;
@@ -35,6 +40,9 @@ public class EnemyStats : MonoBehaviour
 
     public void TakeDamage(float damage)
     {
+        if (canTakeDamage == false)
+            return;
+
         health -= damage;
 
         DamageProcess();
@@ -64,6 +72,7 @@ public class EnemyStats : MonoBehaviour
 
     private IEnumerator Flash()
     {
+        canTakeDamage = false;
 
         foreach (SpriteRenderer sRender in spriteRenderer)
         {
@@ -82,7 +91,37 @@ public class EnemyStats : MonoBehaviour
 
         damageCorutine = null;
 
+        if (health > 0)
+            canTakeDamage = true;
+
 
     }
+    public void DisableStatsColider()
+    {
+        statsCollider.enabled = false;
+    }
 
+    public void EnableStatsColider()
+    {
+        statsCollider.enabled = true;
+    }
+    public float GetCurrentHealth()
+    {
+        return health;
+    }
+
+    public void DisableDamage()
+    {
+        canTakeDamage = false;
+    }
+
+    public void EnableDamage()
+    {
+        canTakeDamage = true;
+    }
+
+    public bool GetCanTakeDamage()
+    {
+        return canTakeDamage;
+    }
 }

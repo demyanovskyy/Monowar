@@ -2,7 +2,7 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.Diagnostics;
 
-public class KnockBackAbility : BaseAbilityPlayer
+public class EnemyKnockBackAbility : BaseAbilityEnemy
 {
 
     private string knockBackAnimParamiterName = "KnockBack";
@@ -19,13 +19,13 @@ public class KnockBackAbility : BaseAbilityPlayer
 
     public void StartKnockBack(float duration, Vector2 force, Transform enemyObject)
     {
-        if (player.playerStats.GetCanTakeDamage() == false)
+        if (enemy.enemyStats.GetCanTakeDamage() == false)
             return;
 
 
-        if(currentKnockBack == null)
+        if (currentKnockBack == null)
         {
-            currentKnockBack = StartCoroutine(KnockBack(duration,force,enemyObject));
+            currentKnockBack = StartCoroutine(KnockBack(duration, force, enemyObject));
         }
         else
         {
@@ -39,7 +39,7 @@ public class KnockBackAbility : BaseAbilityPlayer
 
     public void StartSwingKnockBack(float duration, Vector2 force, int direction)
     {
-        if (player.playerStats.GetCanTakeDamage() == false)
+        if (enemy.enemyStats.GetCanTakeDamage() == false)
             return;
 
 
@@ -57,8 +57,6 @@ public class KnockBackAbility : BaseAbilityPlayer
         }
     }
 
- 
-
     protected override void Initialization()
     {
         base.Initialization();
@@ -72,7 +70,7 @@ public class KnockBackAbility : BaseAbilityPlayer
 
     public IEnumerator KnockBack(float duration, Vector2 force, Transform enemyObject)
     {
-        linkedStateMachine.ChangeState((int)PlayerStates.State.KnockBack);
+        linkedStateMachine.ChangeState((int)EnemyStates.State.KnockBack);
         linkedPhysics.ResetVelocity();
 
         if (transform.position.x >= enemyObject.transform.position.x)
@@ -88,31 +86,31 @@ public class KnockBackAbility : BaseAbilityPlayer
 
         // return to othe states ==============
 
-        if (player.playerStats.GetCurrentHealth() > 0)
+        if (enemy.enemyStats.GetCurrentHealth() > 0)
         {
-            if(linkedPhysics.grounded)
+            if (linkedPhysics.grounded)
             {
-                if(linkedInput.horizontalInput !=0)
-                    linkedStateMachine.ChangeState((int)PlayerStates.State.Move);
+                if (Random.Range(0,1) > 0.5f)
+                    linkedStateMachine.ChangeState((int)EnemyStates.State.Move);
                 else
-                    linkedStateMachine.ChangeState((int)PlayerStates.State.Idle);
+                    linkedStateMachine.ChangeState((int)EnemyStates.State.Idle);
             }
-            else
-            {
-                linkedStateMachine.ChangeState((int)PlayerStates.State.Jump);
-            }
+            //else
+            //{
+            //    linkedStateMachine.ChangeState((int)PlayerStates.State.Jump);
+            //}
 
         }
         else
         {
-            linkedStateMachine.ChangeState((int)PlayerStates.State.Death);
+            linkedStateMachine.ChangeState((int)EnemyStates.State.Death);
         }
 
     }
 
     public IEnumerator SwingKnockBack(float duration, Vector2 force, int direction)
     {
-        linkedStateMachine.ChangeState((int)PlayerStates.State.KnockBack);
+        linkedStateMachine.ChangeState((int)EnemyStates.State.KnockBack);
         linkedPhysics.ResetVelocity();
 
         force.x *= direction;
@@ -122,24 +120,24 @@ public class KnockBackAbility : BaseAbilityPlayer
 
         // return to othe states ==============
 
-        if (player.playerStats.GetCurrentHealth() > 0)
+        if (enemy.enemyStats.GetCurrentHealth() > 0)
         {
             if (linkedPhysics.grounded)
             {
-                if (linkedInput.horizontalInput != 0)
-                    linkedStateMachine.ChangeState((int)PlayerStates.State.Move);
+                if (Random.Range(0, 1) > 0.5f)
+                    linkedStateMachine.ChangeState((int)EnemyStates.State.Move);
                 else
-                    linkedStateMachine.ChangeState((int)PlayerStates.State.Idle);
+                    linkedStateMachine.ChangeState((int)EnemyStates.State.Idle);
             }
-            else
-            {
-                linkedStateMachine.ChangeState((int)PlayerStates.State.Jump);
-            }
+            //else
+            //{
+            //    linkedStateMachine.ChangeState((int)PlayerStates.State.Jump);
+            //}
 
         }
         else
         {
-            linkedStateMachine.ChangeState((int)PlayerStates.State.Death);
+            linkedStateMachine.ChangeState((int)EnemyStates.State.Death);
         }
 
     }
@@ -147,6 +145,6 @@ public class KnockBackAbility : BaseAbilityPlayer
 
     public override void UpdateAnimator()
     {
-        linkedAnimator.SetBool(knockBackParamiterID, linkedStateMachine.curentState == (int)PlayerStates.State.KnockBack);
+        linkedAnimator.SetBool(knockBackParamiterID, linkedStateMachine.curentState == (int)EnemyStates.State.KnockBack);
     }
 }

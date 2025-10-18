@@ -59,6 +59,7 @@ public class PlayerPhysicsControl : MonoBehaviour
     [Header("Colliders")]
     [SerializeField] private Collider2D standCollider;
     [SerializeField] private Collider2D crouchCollider;
+    [SerializeField] private Collider2D attackCollider;
 
     [Header("Interpolation")]// ned for platform
     public RigidbodyInterpolation2D interpolate;
@@ -66,6 +67,17 @@ public class PlayerPhysicsControl : MonoBehaviour
 
     private float gravityValue;
 
+
+
+    public void ActivatedAttackCollider()
+    {
+        attackCollider.enabled = true;
+    }
+
+    public void DeactivatedAttackCollider()
+    {
+        attackCollider.enabled = false;
+    }
 
     public float GetGravity()
     {

@@ -19,11 +19,11 @@ public class EnemyRangeShootAbility : BaseAbilityEnemy
     //{
     //    if (enemy.fieldOfViev.targetInSight)
     //    {
-    //        linkedStateMachine.ChangeState((int)EnemyStates.State.Shoot);
+    //        linkedStateMachine.ChangeState((int)PlayerStates.State.Shoot);
     //    }
     //    else
     //    {
-    //        linkedStateMachine.ChangeState((int)EnemyStates.State.Idle);
+    //        linkedStateMachine.ChangeState((int)PlayerStates.State.Idle);
     //    }
 
     //    StartCoroutine(CheckBehindDelay());

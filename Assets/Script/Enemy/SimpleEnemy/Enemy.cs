@@ -6,7 +6,7 @@ public class Enemy : Entety
 
     public FieldOfView2D fieldOfViev;
     public RotateToTargetWithProperFlipAndGizmos rotateObject;
-
+    public EnemyStats enemyStats;
 
     private void Awake()
     {

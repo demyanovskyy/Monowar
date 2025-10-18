@@ -5,10 +5,18 @@ using UnityEditor.PackageManager;
 using UnityEngine;
 public class EnemyBullet : MonoBehaviour, IPoolable
 {
+    [Header("Bullet Setings")]
     [SerializeField] private float damge = 1;
     [SerializeField] Rigidbody2D _rigidbody2D;
     [SerializeField] float _moveSpeed;
     [SerializeField] IsPooleble hitEffectPrefab;
+
+    [Header("KnockBack Setings")]
+    [SerializeField] private float knockBackDuration = .3f;
+    [SerializeField] private Vector2 knockBackForce = new Vector2(5f, 0);
+    private int pushDirection = 1;
+
+
     //==========for object poll==============================
     private Coroutine _coroutine;
     public event Action<IPoolable> OnReturnToPool;
@@ -75,6 +83,18 @@ public class EnemyBullet : MonoBehaviour, IPoolable
         PlayerStats playerStats = collision.GetComponent<PlayerStats>();
         if (playerStats != null)
         {
+            ////=====KnockBack======================================
+            KnockBackAbility knockBackAbility = collision.GetComponentInParent<KnockBackAbility>();
+
+            if (transform.position.x > collision.transform.position.x)
+                pushDirection = -1;
+            else
+            if (transform.position.x < collision.transform.position.x)
+                pushDirection = 1;
+
+            knockBackAbility.StartSwingKnockBack(knockBackDuration, knockBackForce, pushDirection);
+            //=======================================================
+
             // enemis
             playerStats.DamagePlayer(damge);
         }

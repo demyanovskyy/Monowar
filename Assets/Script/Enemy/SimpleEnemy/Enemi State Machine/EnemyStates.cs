@@ -6,6 +6,7 @@ public class EnemyStates
         Move,
         Death,
         MeleeAttak,
-        Shoot
+        Shoot,
+        KnockBack
     }
 }

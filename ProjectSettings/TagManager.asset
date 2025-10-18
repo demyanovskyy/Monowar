@@ -6,6 +6,7 @@ TagManager:
   tags:
   - PlayerBullet
   - Projectile
+  - Enemy
   layers:
   - Default
   - TransparentFX
@@ -30,7 +31,7 @@ TagManager:
   - NPC
   - Wall
   - PlayerProjectils
-  - 
+  - DamageEnemy
   - 
   - 
   - 

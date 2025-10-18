@@ -64,10 +64,10 @@ public class SpawnController : MonoBehaviour
 
         //only for start game
         //if (startPoint != null)
-        //    {
-        //        player.transform.position = startPoint.transform.position;
-        //        return;
-        //    }
+        //{
+        //    player.transform.position = startPoint.transform.position;
+        //    return;
+        //}
 
         if (SpawnMode.spawnFromCheckPoint == true && canLoadFromCheckPoint == true)
         {
