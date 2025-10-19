@@ -1,52 +1,43 @@
 using System.Collections;
 using UnityEngine;
 
-using UnityEngine.InputSystem;
 
-public class ReloadAbility : BaseAbilityPlayer
+public class EnemyReloadAbility : BaseAbilityEnemy
 {
-    public InputActionReference reloadActionRef;
+  
     [SerializeField] private ReloadBar reloadBar;
-    private Weapon currentWeapon;
+    private EnemyWeapon currentWeapon;
 
     private Coroutine reloadCoroutin;
 
 
-    private void OnEnable()
-    {
-        reloadActionRef.action.performed += TryToReload;
-    }
-
-    private void OnDisable()
-    {
-        reloadActionRef.action.performed -= TryToReload;
-    }
+ 
     protected override void Initialization()
     {
         base.Initialization();
-        currentWeapon = player.GetComponent<WeaponManager>().ReturnCurrentWeapon();
+        currentWeapon = enemy.GetComponent<EnemyWeaponManager>().ReturnCurrentWeapon();
     }
 
     public override void EnterAbility()
     {
-        
+
         linkedPhysics.ResetVelocity();
+        
+    }
+    public override void ProcessAbility()
+    {
+        TryToReload();
     }
 
- 
-
-
-    private void TryToReload(InputAction.CallbackContext value)
+    private void TryToReload()
     {
-        currentWeapon = player.GetComponent<WeaponManager>().ReturnCurrentWeapon();
+        currentWeapon = enemy.GetComponent<EnemyWeaponManager>().ReturnCurrentWeapon();
 
         if (!isParamited || currentWeapon == null)
             return;
 
-        if (linkedPhysics.grounded == false 
-            || linkedStateMachine.curentState == (int)PlayerStates.State.Dash
-            || linkedStateMachine.curentState == (int)PlayerStates.State.Ladder 
-            || linkedStateMachine.curentState == (int)PlayerStates.State.KnockBack)
+        if (linkedPhysics.grounded == false
+            || linkedStateMachine.curentState == (int)EnemyStates.State.KnockBack)
             return;
 
         if (currentWeapon.ReloadCheck() == false || currentWeapon.isReloading)
@@ -58,7 +49,7 @@ public class ReloadAbility : BaseAbilityPlayer
 
     private IEnumerator ReloadRrocess()
     {
-        linkedStateMachine.ChangeState((int)PlayerStates.State.Reload);
+        linkedStateMachine.ChangeState((int)EnemyStates.State.Reload);
         currentWeapon.isReloading = true;
         reloadBar.ActivateReloadBar();
 
@@ -75,8 +66,8 @@ public class ReloadAbility : BaseAbilityPlayer
         currentWeapon.Reload();
         Shooting.OnUpdateAmmo?.Invoke(currentWeapon.curentAmmo, currentWeapon.maxAmmo, currentWeapon.storageAmmo);
 
-        if (linkedStateMachine.curentState != (int)PlayerStates.State.Death && linkedStateMachine.curentState != (int)PlayerStates.State.KnockBack)
-            linkedStateMachine.ChangeState((int)PlayerStates.State.Idle);
+        if (linkedStateMachine.curentState != (int)EnemyStates.State.Death && linkedStateMachine.curentState != (int)EnemyStates.State.KnockBack)
+            linkedStateMachine.ChangeState((int)EnemyStates.State.Idle);
     }
 
     public override void ExitAbility()
@@ -94,7 +85,6 @@ public class ReloadAbility : BaseAbilityPlayer
         //if yor hev animation -> use update Animator
         // else
     }
-
 
 
 }

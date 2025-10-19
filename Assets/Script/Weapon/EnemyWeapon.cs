@@ -114,23 +114,23 @@ public class EnemyWeapon : MonoBehaviour
     }
 
 
-    public void SaveWeaponData()
-    {
-        weaponData.ID = weaponType.ToString();
-        weaponData.currentAmmo = curentAmmo;
-        weaponData.storageAmmo = storageAmmo;
-        ServiceLocator.Current.Get<SaveLoadManager>().SaveData(weaponData, ServiceLocator.Current.Get<SaveLoadManager>().folderName, weaponType.ToString() + ".json");
-    }
+    //public void SaveWeaponData()
+    //{
+    //    weaponData.ID = weaponType.ToString();
+    //    weaponData.currentAmmo = curentAmmo;
+    //    weaponData.storageAmmo = storageAmmo;
+    //    ServiceLocator.Current.Get<SaveLoadManager>().SaveData(weaponData, ServiceLocator.Current.Get<SaveLoadManager>().folderName, weaponType.ToString() + ".json");
+    //}
 
-    public void LoadWeaponData()
-    {
-        ServiceLocator.Current.Get<SaveLoadManager>().LoadData(weaponData, ServiceLocator.Current.Get<SaveLoadManager>().folderName, weaponType.ToString() + ".json");
-        if (weaponData.ID != "")
-        {
-            curentAmmo = weaponData.currentAmmo;
-            storageAmmo = weaponData.storageAmmo;
-        }
-    }
+    //public void LoadWeaponData()
+    //{
+    //    ServiceLocator.Current.Get<SaveLoadManager>().LoadData(weaponData, ServiceLocator.Current.Get<SaveLoadManager>().folderName, weaponType.ToString() + ".json");
+    //    if (weaponData.ID != "")
+    //    {
+    //        curentAmmo = weaponData.currentAmmo;
+    //        storageAmmo = weaponData.storageAmmo;
+    //    }
+    //}
 
     public void SootEnable()
     {

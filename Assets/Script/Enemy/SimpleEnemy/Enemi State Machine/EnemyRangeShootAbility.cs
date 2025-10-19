@@ -40,10 +40,10 @@ public class EnemyRangeShootAbility : BaseAbilityEnemy
 
     public void Shoot()
     {
-
         //Check Ammo
         if (currentWeapon.curentAmmo <= 0 || currentWeapon.isReloading)
             return;
+
 
         // Play Sound SFX
         currentWeapon.audioSours.PlayOneShot(currentWeapon.audioClip);
@@ -132,6 +132,10 @@ public class EnemyRangeShootAbility : BaseAbilityEnemy
             shootCooldown -= Time.deltaTime;
 
         }
+
+        //Check Ammo
+        if (currentWeapon.curentAmmo <= 0)
+            linkedStateMachine.ChangeState((int)EnemyStates.State.Reload);
 
         if (currentWeapon != null)
             if (currentWeapon.weaponType != TypeOfWeapon.Heand)

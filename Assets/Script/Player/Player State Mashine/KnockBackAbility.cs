@@ -15,6 +15,7 @@ public class KnockBackAbility : BaseAbilityPlayer
     public override void ExitAbility()
     {
         currentKnockBack = null;
+        linkedPhysics.DeactivatedAttackCollider();
     }
 
     public void StartKnockBack(float duration, Vector2 force, Transform enemyObject)

@@ -7,6 +7,7 @@ public class EnemyStates
         Death,
         MeleeAttak,
         Shoot,
-        KnockBack
+        KnockBack,
+        Reload
     }
 }

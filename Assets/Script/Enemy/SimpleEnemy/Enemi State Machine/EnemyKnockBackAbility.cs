@@ -15,6 +15,7 @@ public class EnemyKnockBackAbility : BaseAbilityEnemy
     public override void ExitAbility()
     {
         currentKnockBack = null;
+        linkedPhysics.DeactivatedAttackCollider();
     }
 
     public void StartKnockBack(float duration, Vector2 force, Transform enemyObject)
