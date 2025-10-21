@@ -54,7 +54,10 @@ public class Enemy : Entety
     public void DeactivateFoV()
     {
         if (fieldOfViev != null)
-            fieldOfViev.SetActive(false);
+        {
+            
+            fieldOfViev.DetectOff();
+        }
 
     }
 

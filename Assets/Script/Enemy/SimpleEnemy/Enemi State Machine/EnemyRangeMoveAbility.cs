@@ -3,6 +3,7 @@ using System.Collections;
 
 public class EnemyRangeMoveAbility : BaseAbilityEnemy
 {
+
     private string moveAnimParamiterName = "Move";
     private int moveParamiterID;
 
@@ -10,8 +11,15 @@ public class EnemyRangeMoveAbility : BaseAbilityEnemy
     [SerializeField] private float minMoveTime;
     [SerializeField] private float maxMoveTime;
     [SerializeField] private float minimumTurnDelay;
+
+    [SerializeField] private float changeDelay = 2f;
+
     private float moveStartTime;
     private float turnCooldown;
+
+
+    private float changeTime;
+    private float changeChance;
 
     protected override void Initialization()
     {
@@ -20,7 +28,7 @@ public class EnemyRangeMoveAbility : BaseAbilityEnemy
         moveStartTime = Random.Range(minMoveTime, maxMoveTime);
     }
 
-     public override void EnterAbility()
+    public override void EnterAbility()
     {
         if (linkedPhysics.canCheckBehind)
         {
@@ -34,18 +42,31 @@ public class EnemyRangeMoveAbility : BaseAbilityEnemy
 
         moveStartTime = Random.Range(minMoveTime, maxMoveTime);
 
+        changeTime = changeDelay;
 
+        changeChance = Random.Range(0, 100);
     }
 
     public override void ProcessFixedAbility()
     {
+        
         linkedPhysics.rb.linearVelocity = new Vector2(moveSpeed, linkedPhysics.rb.linearVelocityY);
+
     }
+
 
     public override void ProcessAbility()
     {
-        if (!isParamited)
+
+       if (!isParamited)
             return;
+
+        changeTime -= Time.deltaTime;
+        if (changeTime < 0)
+        {
+            changeChance = Random.Range(0, 100);
+            changeTime = changeDelay;
+        }
 
         moveStartTime -= Time.deltaTime;
         if (moveStartTime <= 0 && linkedPhysics.playerAhead == false)
@@ -79,7 +100,7 @@ public class EnemyRangeMoveAbility : BaseAbilityEnemy
             linkedStateMachine.ChangeState((int)EnemyStates.State.MeleeAttak);
         }
         else
-        if (enemy.fieldOfViev.targetInSight)
+        if (enemy.fieldOfViev.targetInSight && changeChance > 80)
         {
             linkedStateMachine.ChangeState((int)EnemyStates.State.Shoot);
         }
@@ -87,6 +108,7 @@ public class EnemyRangeMoveAbility : BaseAbilityEnemy
 
     public override void UpdateAnimator()
     {
+        Debug.Log("UpdateAnimator-Move");
         linkedAnimator.SetBool(moveParamiterID, linkedStateMachine.curentState == (int)EnemyStates.State.Move);
     }
 }

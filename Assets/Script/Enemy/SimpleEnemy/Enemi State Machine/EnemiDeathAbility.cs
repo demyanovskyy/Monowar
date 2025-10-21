@@ -19,8 +19,9 @@ public class EnemiDeathAbility : BaseAbilityEnemy
         linkedPhysics.DeathColliderDeactivation();
 
         //=======================================
-        enemy.DeactivateRotateobject();
         enemy.DeactivateFoV();
+        enemy.DeactivateRotateobject();
+        
 
     }
 

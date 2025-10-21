@@ -8,6 +8,7 @@ public class EnemyRangeIdleAbilyty : BaseAbilityEnemy
 
     [SerializeField] private float minIdleTime;
     [SerializeField] private float maxIdleTime;
+
     private float idleStartTime;
 
     protected override void Initialization()
@@ -20,6 +21,7 @@ public class EnemyRangeIdleAbilyty : BaseAbilityEnemy
     {
         idleStartTime = Random.Range(minIdleTime, maxIdleTime);
         linkedPhysics.ResetVelocity();
+
     }
 
     public override void ProcessAbility()
@@ -33,7 +35,9 @@ public class EnemyRangeIdleAbilyty : BaseAbilityEnemy
         }
 
         idleStartTime -= Time.deltaTime;
-        if (idleStartTime <= 0 || linkedPhysics.playerAhead == false)
+
+
+        if (idleStartTime <= 0 || linkedPhysics.playerAhead)
         {
             linkedStateMachine.ChangeState((int)EnemyStates.State.Move);
         }
@@ -43,14 +47,17 @@ public class EnemyRangeIdleAbilyty : BaseAbilityEnemy
             linkedStateMachine.ChangeState((int)EnemyStates.State.MeleeAttak);
         }
         else
-        if (enemy.fieldOfViev.targetInSight)
+         if (enemy.fieldOfViev.targetInSight)
         {
             linkedStateMachine.ChangeState((int)EnemyStates.State.Shoot);
         }
+
     }
 
     public override void UpdateAnimator()
     {
+        Debug.Log("UpdateAnimator-Idle");
         linkedAnimator.SetBool(idleParamiterID, linkedStateMachine.curentState == (int)EnemyStates.State.Idle);
     }
+
 }

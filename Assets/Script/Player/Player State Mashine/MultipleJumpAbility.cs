@@ -54,7 +54,7 @@ public class MultipleJumpAbility : BaseAbilityPlayer
     public override void ProcessAbility()
     {
         entety.Flip();
-        Debug.Log("Flip in Jump");
+        //Debug.Log("Flip in Jump");
         minimumAirTime -= Time.deltaTime;
 
         if (jumping)

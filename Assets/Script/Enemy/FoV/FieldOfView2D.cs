@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using System.Collections.Generic;
 
 [RequireComponent(typeof(MeshFilter), typeof(MeshRenderer))]
 public class FieldOfView2D : MonoBehaviour
@@ -20,8 +19,11 @@ public class FieldOfView2D : MonoBehaviour
     public float detectionDelay = 0.2f; // Интервал обновления логики
 
     private Mesh mesh;
+    private MeshRenderer meshRenderer;
     public bool facingRight = true;
     private float detectionTimer;
+
+    private bool detect = true;
 
     void Awake()
     {
@@ -30,11 +32,30 @@ public class FieldOfView2D : MonoBehaviour
 
         var mat = new Material(Shader.Find("Sprites/Default"));
         mat.color = fovColor;
-        GetComponent<MeshRenderer>().material = mat;
+        meshRenderer = GetComponent<MeshRenderer>();
+        meshRenderer.material = mat;
+    }
+
+    public void DetectOff()
+    {
+        detect = false;
+        meshRenderer.enabled = false;
+    }
+
+    public void DetectOn()
+    {
+        detect = true;
+        meshRenderer.enabled = true;
     }
 
     void LateUpdate()
     {
+
+        if (!detect)
+        {
+            targetInSight = false;
+            return;
+        }
 
         facingRight = parent.GetFacingDerection();
         //facingRight = transform.eulerAngles.y < 90f || transform.eulerAngles.y > 270f;
@@ -49,6 +70,8 @@ public class FieldOfView2D : MonoBehaviour
             detectionTimer = detectionDelay;
             FindVisibleTarget();
         }
+
+
     }
 
     void GenerateViewMesh()
@@ -91,6 +114,8 @@ public class FieldOfView2D : MonoBehaviour
 
     void FindVisibleTarget()
     {
+        if (!detect) return;
+
         targetInSight = false;
         visibleTarget = null;
 
@@ -141,7 +166,7 @@ public class FieldOfView2D : MonoBehaviour
         Gizmos.color = targetInSight ? Color.green : Color.red;
         Gizmos.DrawWireSphere(transform.position, viewRadius);
 
-        if(visibleTarget != null)
-        Debug.DrawLine(transform.position, visibleTarget.transform.position, Color.green);
+        if (visibleTarget != null)
+            Debug.DrawLine(transform.position, visibleTarget.transform.position, Color.green);
     }
 }

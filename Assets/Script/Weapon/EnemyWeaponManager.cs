@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class EnemyWeaponManager : MonoBehaviour
@@ -131,6 +132,16 @@ public class EnemyWeaponManager : MonoBehaviour
         rArm.SetActive(false);
     }
 
+    public void DeActivateArm()
+    {
+        lArm.SetActive(false);
+        rArm.SetActive(false);
+    }
+
+    public void ActivateArm()
+    {
+        SetWeaponHeandPoint(currentWeapon.weaponType);
+    }
 
     public void AtivateCurrentlWeapon()
     {

@@ -4,7 +4,10 @@ using UnityEngine;
 
 public class EnemyReloadAbility : BaseAbilityEnemy
 {
-  
+
+    private string reloadAnimParamiterName = "Reload";
+    private int reloadParamiterID;
+
     [SerializeField] private ReloadBar reloadBar;
     private EnemyWeapon currentWeapon;
 
@@ -15,6 +18,9 @@ public class EnemyReloadAbility : BaseAbilityEnemy
     protected override void Initialization()
     {
         base.Initialization();
+
+        reloadParamiterID = Animator.StringToHash(reloadAnimParamiterName);
+
         currentWeapon = enemy.GetComponent<EnemyWeaponManager>().ReturnCurrentWeapon();
     }
 
@@ -22,7 +28,10 @@ public class EnemyReloadAbility : BaseAbilityEnemy
     {
 
         linkedPhysics.ResetVelocity();
-        
+
+        enemy.GetComponent<EnemyWeaponManager>().DeActivateArm();
+
+
     }
     public override void ProcessAbility()
     {
@@ -77,6 +86,8 @@ public class EnemyReloadAbility : BaseAbilityEnemy
             StopCoroutine(reloadCoroutin);
 
         currentWeapon.isReloading = false;
+
+        enemy.GetComponent<EnemyWeaponManager>().ActivateArm();
     }
 
 
@@ -84,6 +95,8 @@ public class EnemyReloadAbility : BaseAbilityEnemy
     {
         //if yor hev animation -> use update Animator
         // else
+
+        linkedAnimator.SetBool(reloadParamiterID, linkedStateMachine.curentState == (int)EnemyStates.State.Reload);
     }
 
 

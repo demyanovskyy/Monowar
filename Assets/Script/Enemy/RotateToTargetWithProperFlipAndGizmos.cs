@@ -61,7 +61,7 @@ public class RotateToTargetWithProperFlipAndGizmos : MonoBehaviour
 
 
 
-        if (!offRotate || !isRotate)
+        if (offRotate || !isRotate)
         {
             targetAngle = 0f;
         }

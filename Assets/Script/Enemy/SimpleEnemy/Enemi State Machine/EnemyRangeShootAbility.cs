@@ -3,17 +3,22 @@ using UnityEngine;
 
 public class EnemyRangeShootAbility : BaseAbilityEnemy
 {
-    private string shootAnimParamiterName = "Idle";
+    private string shootAnimParamiterName = "Shoot";
     private int shootParamiterID;
 
     [SerializeField] private float shootTime;
 
     [SerializeField] private EnemyWeapon currentWeapon;
 
+    [SerializeField] private float changeDelay = 2f;
 
     private bool shootCooldownOver = true;
 
     private float shootCooldown;
+
+    private float changeTime;
+    private float changeChance;
+
 
     //public void EndOfAttack()
     //{
@@ -29,6 +34,26 @@ public class EnemyRangeShootAbility : BaseAbilityEnemy
     //    StartCoroutine(CheckBehindDelay());
 
     //}
+    protected override void Initialization()
+    {
+        base.Initialization();
+        shootParamiterID = Animator.StringToHash(shootAnimParamiterName);
+
+    }
+
+
+    public override void EnterAbility()
+    {
+        linkedPhysics.ResetVelocity();
+        linkedPhysics.canCheckBehind = false;
+
+        shootCooldown = shootTime;
+
+        changeTime = changeDelay;
+
+        changeChance = Random.Range(0, 100);
+    }
+
 
     public override void ExitAbility()
     {
@@ -101,24 +126,11 @@ public class EnemyRangeShootAbility : BaseAbilityEnemy
         linkedPhysics.canCheckBehind = true;
     }
 
-    protected override void Initialization()
-    {
-        base.Initialization();
-        shootParamiterID = Animator.StringToHash(shootAnimParamiterName);
-
-    }
-
-
-    public override void EnterAbility()
-    {
-        linkedPhysics.ResetVelocity();
-        linkedPhysics.canCheckBehind = false;
-
-        shootCooldown = shootTime;
-    }
+ 
 
     public override void ProcessFixedAbility()
     {
+        
     }
 
 
@@ -126,6 +138,14 @@ public class EnemyRangeShootAbility : BaseAbilityEnemy
     {
         if (!isParamited)
             return;
+
+        changeTime -= Time.deltaTime;
+        if (changeTime < 0)
+        {
+            changeChance = Random.Range(0, 100);
+            changeTime = changeDelay;
+        }
+
 
         if (enemy.fieldOfViev.targetInSight)
         {
@@ -153,7 +173,7 @@ public class EnemyRangeShootAbility : BaseAbilityEnemy
 
         if (shootCooldown <= 0)
         {
-            if (enemy.fieldOfViev.targetInSight)
+            if (enemy.fieldOfViev.targetInSight && changeChance > 80)
                 linkedStateMachine.ChangeState((int)EnemyStates.State.Shoot);
             else
                 linkedStateMachine.ChangeState((int)EnemyStates.State.Move);
