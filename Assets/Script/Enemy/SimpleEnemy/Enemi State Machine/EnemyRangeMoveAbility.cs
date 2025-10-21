@@ -108,7 +108,7 @@ public class EnemyRangeMoveAbility : BaseAbilityEnemy
 
     public override void UpdateAnimator()
     {
-        Debug.Log("UpdateAnimator-Move");
+        
         linkedAnimator.SetBool(moveParamiterID, linkedStateMachine.curentState == (int)EnemyStates.State.Move);
     }
 }

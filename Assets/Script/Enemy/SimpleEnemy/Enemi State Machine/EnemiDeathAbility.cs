@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 public class EnemiDeathAbility : BaseAbilityEnemy
@@ -5,6 +6,7 @@ public class EnemiDeathAbility : BaseAbilityEnemy
 
     private string deathAnimParamiterName = "Death";
     private int deathParamiterID;
+    private bool destroy = false;
 
     protected override void Initialization()
     {
@@ -25,11 +27,19 @@ public class EnemiDeathAbility : BaseAbilityEnemy
 
     }
 
+    public override void ProcessFixedAbility()
+    {
+        if(destroy)
+            StartCoroutine(Destroy());
+    }
+
     public override void ProcessAbility()
     {
         if (!isParamited)
             return;
 
+        destroy = true;
+        
     }
 
     public override void UpdateAnimator()
@@ -37,4 +47,11 @@ public class EnemiDeathAbility : BaseAbilityEnemy
         linkedAnimator.SetBool(deathParamiterID, linkedStateMachine.curentState == (int)EnemyStates.State.Death);
     }
 
+
+    IEnumerator Destroy()
+    {
+
+        yield return new WaitForSeconds(6f);
+        Destroy(enemy.gameObject);
+    }
 }

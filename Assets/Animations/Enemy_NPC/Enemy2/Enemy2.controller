@@ -102,6 +102,22 @@ AnimatorStateTransition:
   m_InterruptionSource: 0
   m_OrderedInterruption: 1
   m_CanTransitionToSelf: 0
+--- !u!114 &-5933375875629780824
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4c1e535f2d4b3aa46af57b3b072ebe20, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DeathBehavior
+  _explodeparts: {fileID: 1689894659596653353, guid: f2609458649cb4b4ea56c2fe5d11e895, type: 3}
+  explodeTimer: 0.1
+  _explodeRangeX: 2
+  _explodeRangeY: 0.5
 --- !u!1101 &-4289017349061787410
 AnimatorStateTransition:
   m_ObjectHideFlags: 1
@@ -138,7 +154,8 @@ AnimatorState:
   m_Speed: 1
   m_CycleOffset: 0
   m_Transitions: []
-  m_StateMachineBehaviours: []
+  m_StateMachineBehaviours:
+  - {fileID: -5933375875629780824}
   m_Position: {x: 50, y: 50, z: 0}
   m_IKOnFeet: 0
   m_WriteDefaultValues: 1

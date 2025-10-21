@@ -56,7 +56,7 @@ public class EnemyRangeIdleAbilyty : BaseAbilityEnemy
 
     public override void UpdateAnimator()
     {
-        Debug.Log("UpdateAnimator-Idle");
+        
         linkedAnimator.SetBool(idleParamiterID, linkedStateMachine.curentState == (int)EnemyStates.State.Idle);
     }
 
