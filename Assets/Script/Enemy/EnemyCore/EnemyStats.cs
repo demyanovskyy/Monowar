@@ -76,7 +76,7 @@ public class EnemyStats : MonoBehaviour
 
         foreach (SpriteRenderer sRender in spriteRenderer)
         {
-            sRender.material = flashMaterial;
+            sRender.material = flashMatirialInstance;
         }
 
         // shader graf control====

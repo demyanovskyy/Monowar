@@ -1,7 +1,6 @@
 using Assets.Scripts.Core.ObjectPooling;
 using System;
 using System.Collections;
-using UnityEditor.PackageManager;
 using UnityEngine;
 public class Bullet : MonoBehaviour, IPoolable
 {
@@ -13,7 +12,7 @@ public class Bullet : MonoBehaviour, IPoolable
 
     [Header("KnockBack Setings")]
     [SerializeField] private float knockBackDuration = .3f;
-    [SerializeField] private Vector2 knockBackForce = new Vector2(5f,0);
+    [SerializeField] private Vector2 knockBackForce = new Vector2(5f, 0);
     private int pushDirection = 1;
 
 
@@ -33,7 +32,7 @@ public class Bullet : MonoBehaviour, IPoolable
     }
     public void Reset()
     {
- 
+
         OnDestroyed();
     }
 
@@ -52,7 +51,7 @@ public class Bullet : MonoBehaviour, IPoolable
         }
 
         OnReturnToPool?.Invoke(this);
-        
+
     }
 
     public void SetParamiter(Vector3 bTransform, Quaternion bRotate)
@@ -72,7 +71,7 @@ public class Bullet : MonoBehaviour, IPoolable
 
         _rigidbody2D.linearVelocity = transform.right * _moveSpeed;
 
-       // Destroy(this.gameObject, 5f);
+        // Destroy(this.gameObject, 5f);
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
@@ -91,8 +90,8 @@ public class Bullet : MonoBehaviour, IPoolable
             else
             if (transform.position.x < collision.transform.position.x)
                 pushDirection = 1;
-
-            knockBackAbility.StartSwingKnockBack(knockBackDuration, knockBackForce, pushDirection);
+            if (knockBackAbility != null)
+                knockBackAbility.StartSwingKnockBack(knockBackDuration, knockBackForce, pushDirection);
             //===============================================================
 
             // enemis
@@ -113,7 +112,7 @@ public class Bullet : MonoBehaviour, IPoolable
         //}
         BulletEffect();
         OnDestroyed();
-       // Destroy(this.gameObject);
+        // Destroy(this.gameObject);
 
     }
 

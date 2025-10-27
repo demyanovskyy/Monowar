@@ -22,7 +22,7 @@ public class FlyEnemy : Entety
             }
             ability.UpdateAnimator();
         }
-        Debug.Log("Curent state is:" + gameObject.name + ":" + stateMachine.curentState);
+       // Debug.Log("Curent state is:" + gameObject.name + ":" + stateMachine.curentState);
     }
     private void FixedUpdate()
     {
