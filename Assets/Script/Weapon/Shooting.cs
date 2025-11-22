@@ -13,6 +13,11 @@ public class Shooting : MonoBehaviour
 
     [SerializeField] private Player player;
 
+    [SerializeField] private Transform defaultWeaponVectorPos;
+
+    [SerializeField] private Vector3 tempPosColbackWeaponPos;
+
+
     private Weapon currentWeapon;
 
     public bool shootButtonHeld = false;
@@ -42,11 +47,15 @@ public class Shooting : MonoBehaviour
 
     }
 
+    public void WeaponPointUpdate()
+    {
+        tempPosColbackWeaponPos = new Vector2(0, 0);
 
+    }
 
     private void TryToShoot(InputAction.CallbackContext value)
     {
-
+        WeaponPointUpdate();
         currentWeapon = weaponManager.ReturnCurrentWeapon();
 
         if (currentWeapon.weaponType != TypeOfWeapon.Heand)
@@ -87,12 +96,16 @@ public class Shooting : MonoBehaviour
         currentWeapon.audioSours.PlayOneShot(currentWeapon.audioClip);
 
         // Instantiate Shell
-       //Instantiate(currentWeapon.shellPrefab, currentWeapon.shellSpawnPoint.position, currentWeapon.transform.rotation);
+        //Instantiate(currentWeapon.shellPrefab, currentWeapon.shellSpawnPoint.position, currentWeapon.transform.rotation);
         IsPooleble s = ServiceLocator.Current.Get<LevelManager>().objectPoole.GetObject(currentWeapon.shellPrefab);
         s.GetComponent<Shell>().SetParamiter(currentWeapon.shellSpawnPoint.position, currentWeapon.transform.rotation);
 
         //Collback weapon
-        currentWeapon.defaultWeaponVectorPos.localPosition = currentWeapon.tempPosColbackWeaponPos - Vector3.right * currentWeapon.recoilStrenght;
+        // currentWeapon.defaultWeaponVectorPos.localPosition = currentWeapon.tempPosColbackWeaponPos - Vector3.right * currentWeapon.recoilStrenght;
+
+        defaultWeaponVectorPos.localPosition = tempPosColbackWeaponPos - Vector3.right * currentWeapon.recoilStrenght;
+
+
 
         // Instatiate Bullet
         //Bullet bullet = Instantiate(currentWeapon._bulletPrefab, currentWeapon._shootPoint.position, currentWeapon._shootPoint.rotation);
@@ -148,7 +161,9 @@ public class Shooting : MonoBehaviour
                     Shoot();
                 }
 
-                currentWeapon.defaultWeaponVectorPos.localPosition = Vector2.Lerp(currentWeapon.defaultWeaponVectorPos.localPosition, currentWeapon.tempPosColbackWeaponPos, currentWeapon.armRecoil * Time.deltaTime);
+                // currentWeapon.defaultWeaponVectorPos.localPosition = Vector2.Lerp(currentWeapon.defaultWeaponVectorPos.localPosition, currentWeapon.tempPosColbackWeaponPos, currentWeapon.armRecoil * Time.deltaTime);
+
+                defaultWeaponVectorPos.localPosition = Vector2.Lerp(defaultWeaponVectorPos.localPosition, tempPosColbackWeaponPos, currentWeapon.armRecoil * Time.deltaTime);
             }
     }
 

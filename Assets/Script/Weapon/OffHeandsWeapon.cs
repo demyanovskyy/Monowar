@@ -33,13 +33,13 @@ public class OffHeandsWeapon : MonoBehaviour
         if (offHeadIKRCCD != null)
             offHeadIKRCCD.position = offHeadPoint.position;
 
-        if (offHandIKR != null)
-            offHandIKR.position = _RPoint.position;
+        //if (offHandIKR != null)
+        //    offHandIKR.position = _RPoint.position;
         if (offHandIKL != null)
             offHandIKL.position = _LPoint.position;
 
-        if (offHandIKRCCD != null)
-            offHandIKRCCD.position = _RCCDPoint.position;
+        //if (offHandIKRCCD != null)
+        //    offHandIKRCCD.position = _RCCDPoint.position;
         if (offHandIKLCCD != null)
             offHandIKLCCD.position = _LCCDPoint.position;
     }

@@ -19,8 +19,6 @@ public class RotateObject : MonoBehaviour
     [SerializeField] private bool frizeRotateArm = false;
     [SerializeField] private bool frizeRotateGun = false;
 
-    [SerializeField] private GameObject _Head;
-
     [SerializeField] private WeaponManager _weaponManager;
 
     private float armAngle, gunAngle;
@@ -79,7 +77,6 @@ public class RotateObject : MonoBehaviour
 
             rotateObjectTransform.rotation = Quaternion.Slerp(rotateObjectTransform.rotation, rotZ, speedRotateAim * Time.deltaTime);
 
-            _Head.SetActive(false);
         }
         else
         {
@@ -130,7 +127,6 @@ public class RotateObject : MonoBehaviour
 
             rotateObjectTransform.localScale = _locatScale;
 
-            _Head.SetActive(true);
         }
     } 
 

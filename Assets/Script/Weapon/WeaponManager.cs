@@ -1,7 +1,9 @@
 using System;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.U2D.IK;
 
 public class WeaponManager : MonoBehaviour
 {
@@ -9,8 +11,34 @@ public class WeaponManager : MonoBehaviour
 
     public InputActionReference changeWeponActionRef;
 
-    [SerializeField] private GameObject lArm;
-    [SerializeField] private GameObject rArm;
+
+    [SerializeField] private IKManager2D _IKManager;
+    [SerializeField] private Animator _animator;
+
+    [Header("Weapon solvers")]
+    [Header("Left arm solvers")]
+    [SerializeField] private Solver2D weaponLeftArmSolver;
+    [SerializeField] private Solver2D weaponLeftHeandSolver;
+
+    [Header("Right arm solvers")]
+    [SerializeField] private Solver2D weaponRightArmSolver;
+    [SerializeField] private Solver2D weaponRightHeandSolver;
+
+    [Header("Animaten solvers")]
+    [Header("Left arm solvers")]
+    [SerializeField] private Solver2D animLeftArmSolver;
+    [SerializeField] private Solver2D animLeftHeandSolver;
+
+    [Header("Right arm solvers")]
+    [SerializeField] private Solver2D animRightArmSolver;
+    [SerializeField] private Solver2D animRightHeandSolver;
+
+    [Header("Head solvers")]
+    [SerializeField] private Solver2D weaponHeadSolver;
+    [SerializeField] private Solver2D animHeadSolver;
+
+
+
     public List<Weapon> weapons = new List<Weapon>();
 
 
@@ -19,6 +47,8 @@ public class WeaponManager : MonoBehaviour
     private TypeOfWeapon tempWeapon;
 
     private int weaponSelect = 0;
+
+    
 
     public static Action<Sprite, int, int, int> OnUpdateAllInfo;
 
@@ -102,7 +132,7 @@ public class WeaponManager : MonoBehaviour
             weaponSelect = weapons.Count;
         }
         else
-        if (weaponSelect < 0)
+        if (weaponSelect <= 0)
         {
             weaponSelect = 0;
         }
@@ -112,6 +142,7 @@ public class WeaponManager : MonoBehaviour
         {
 
             ActivateWeapon((TypeOfWeapon)weaponSelect);
+            SetAnimator((TypeOfWeapon)weaponSelect);
         }
     }
 
@@ -176,6 +207,7 @@ public class WeaponManager : MonoBehaviour
             currentWeapon.shootEnable = true;
             // set weapon heand point
             SetWeaponHeandPoint(currentWeapon.weaponType);
+
             currentWeapon.GetComponent<OffHeandsWeapon>().OffHeandUptatePoint();
             // activate rotateobject
             player.rotateObject.rotateObjectTransform.SetActive(true);
@@ -190,6 +222,8 @@ public class WeaponManager : MonoBehaviour
     public void DeactivateAllWeapon()
     {
         ActivateWeapon(TypeOfWeapon.Heand);
+       
+        
     }
 
     public void DeActivateCurrentWeapon()
@@ -209,14 +243,22 @@ public class WeaponManager : MonoBehaviour
         // Activate rotate 
         player.rotateObject.ActivateFrizeRotate();
         // De activate Arm point
-        lArm.SetActive(false);
-        rArm.SetActive(false);
+
+        RemoveAllWeaponSolver();
+
+        AddAllAnimSolver();
+       
+
     }
+
+
 
 
     public void AtivateCurrentlWeapon()
     {
         ActivateWeapon(tempWeapon);
+
+        
     }
 
 
@@ -232,27 +274,199 @@ public class WeaponManager : MonoBehaviour
         switch (wSelect)
         {
             case TypeOfWeapon.Heand:
-                lArm.SetActive(false);
-                rArm.SetActive(false);
+                RemoveAllWeaponSolver();
+                RemoveAllAnimSolver();
+
+                AddAnimLeftArmSolver();
+                AddAnimRightArmSolver();
+                SetAnimationHeadSolwer();
+
 
                 break;
             case TypeOfWeapon.Pistol:
-                lArm.SetActive(false);
-                rArm.SetActive(true);
+                RemoveWeaponLeftArmSolver();
+                AddAnimLeftArmSolver();
+
+                RemoveAnimRightArmSolver();
+                AddWeaponRightArmSolver();
+
+                SetWeaponHeadSolwer();
+
+
 
                 break;
             case TypeOfWeapon.ShotGun:
-                lArm.SetActive(true);
-                rArm.SetActive(true);
+
+                RemoveAnimLeftArmSolver();
+                AddWeaponLeftArmSolver();
+
+                RemoveAnimRightArmSolver();
+                AddWeaponRightArmSolver();
+
+                SetWeaponHeadSolwer();
+
+
 
                 break;
             case TypeOfWeapon.Rifle:
-                lArm.SetActive(true);
-                rArm.SetActive(true);
+                RemoveAnimLeftArmSolver();
+                AddWeaponLeftArmSolver();
+
+                RemoveAnimRightArmSolver();
+                AddWeaponRightArmSolver();
+
+                SetWeaponHeadSolwer();
+
+
 
                 break;
         }
     }
 
 
+
+
+    public void RemoveAllWeaponSolver()
+    {
+        _IKManager.RemoveSolver(weaponLeftArmSolver);
+        _IKManager.RemoveSolver(weaponLeftHeandSolver);
+
+        _IKManager.RemoveSolver(weaponRightArmSolver);
+        _IKManager.RemoveSolver(weaponRightHeandSolver);
+
+        _IKManager.RemoveSolver(weaponHeadSolver);
+    }
+
+
+    public void RemoveWeaponLeftArmSolver()
+    {
+        _IKManager.RemoveSolver(weaponLeftArmSolver);
+        _IKManager.RemoveSolver(weaponLeftHeandSolver);
+    }
+
+    public void AddWeaponLeftArmSolver()
+    {
+        _IKManager.AddSolver(weaponLeftArmSolver);
+        _IKManager.AddSolver(weaponLeftHeandSolver);
+    }
+
+    public void RemoveWeaponRightArmSolver()
+    {
+
+        _IKManager.RemoveSolver(weaponRightArmSolver);
+        _IKManager.RemoveSolver(weaponRightHeandSolver);
+    }
+
+    public void AddWeaponRightArmSolver()
+    {
+        _IKManager.AddSolver(weaponRightArmSolver);
+        _IKManager.AddSolver(weaponRightHeandSolver);
+    }
+
+    public void SetWeaponHeadSolwer()
+    {
+        _IKManager.RemoveSolver(animHeadSolver);
+        _IKManager.RemoveSolver(weaponHeadSolver);
+
+        _IKManager.solvers.Insert(0, weaponHeadSolver);
+    }
+
+ 
+
+
+    ///=================anim solver=======================
+    ///
+    public void RemoveAllAnimSolver()
+    {
+        _IKManager.RemoveSolver(animLeftArmSolver);
+        _IKManager.RemoveSolver(animLeftHeandSolver);
+
+        _IKManager.RemoveSolver(animRightArmSolver);
+        _IKManager.RemoveSolver(animRightHeandSolver);
+
+        _IKManager.RemoveSolver(weaponHeadSolver);
+    }
+
+
+    public void AddAllAnimSolver()
+    {
+        _IKManager.AddSolver(animLeftArmSolver);
+        _IKManager.AddSolver(animLeftHeandSolver);
+
+        _IKManager.AddSolver(animRightArmSolver);
+        _IKManager.AddSolver(animRightHeandSolver);
+
+        SetAnimationHeadSolwer();
+    }
+
+
+
+    public void RemoveAnimLeftArmSolver()
+    {
+        _IKManager.RemoveSolver(animLeftArmSolver);
+        _IKManager.RemoveSolver(animLeftHeandSolver);
+    }
+
+    public void AddAnimLeftArmSolver()
+    {
+        _IKManager.AddSolver(animLeftArmSolver);
+        _IKManager.AddSolver(animLeftHeandSolver);
+    }
+
+    public void RemoveAnimRightArmSolver()
+    {
+
+        _IKManager.RemoveSolver(animRightArmSolver);
+        _IKManager.RemoveSolver(animRightHeandSolver);
+    }
+
+    public void AddAnimRightArmSolver()
+    {
+        _IKManager.AddSolver(animRightArmSolver);
+        _IKManager.AddSolver(animRightHeandSolver);
+    }
+
+    public void SetAnimationHeadSolwer()
+    {
+        _IKManager.RemoveSolver(animHeadSolver);
+        _IKManager.RemoveSolver(weaponHeadSolver);
+
+        _IKManager.solvers.Insert(0, animHeadSolver);
+    }
+
+
+    private void SetAnimator(TypeOfWeapon wSelect)
+    {
+
+
+        switch (wSelect)
+        {
+            case TypeOfWeapon.Heand:
+
+                
+                _animator.SetLayerWeight(_animator.GetLayerIndex("Weapon"), 0);
+
+                break;
+            case TypeOfWeapon.Pistol:
+
+               
+                _animator.SetLayerWeight(_animator.GetLayerIndex("Weapon"), 1);
+                _animator.SetFloat("WeaponType", (float)TypeOfWeapon.Pistol);
+                break;
+            case TypeOfWeapon.ShotGun:
+                
+                _animator.SetLayerWeight(_animator.GetLayerIndex("Weapon"), 1);
+                _animator.SetFloat("WeaponType", (float)TypeOfWeapon.ShotGun);
+
+                break;
+            case TypeOfWeapon.Rifle:
+               
+                _animator.SetLayerWeight(_animator.GetLayerIndex("Weapon"), 1);
+                _animator.SetFloat("WeaponType", (float)TypeOfWeapon.Rifle);
+                break;
+        }
+
+
+        
+     }
 }

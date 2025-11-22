@@ -17,18 +17,20 @@ public class DoubleJump : BaseAbilityPlayer
 
     public override void EnterAbility()
     {
-        player.GetComponent<WeaponManager>().DeActivateCurrentWeapon();
+       
+        //player.GetComponent<WeaponManager>().DeActivateCurrentWeapon();
 
-        //player.DeactivateCurrentWeapon();
+       
     }
 
     public override void ExitAbility()
     {
-        player.GetComponent<WeaponManager>().AtivateCurrentlWeapon();
+        //player.GetComponent<WeaponManager>().AtivateCurrentlWeapon();
+       
         doubleJumpAnimFinish = false;
 
 
-        // player.ActivateCurrentWeapon();
+        
     }
     public override void ProcessAbility()
     {
