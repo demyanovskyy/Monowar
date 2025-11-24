@@ -62,9 +62,9 @@ public class Weapon : MonoBehaviour
 
         if (flashingParticle) FillListParticle();
 
-        MuzleFlash.SetActive(false);
+        if (MuzleFlash != null) MuzleFlash.SetActive(false);
 
-        tempPosColbackWeaponPos = new Vector2(defaultWeaponVectorPos.localPosition.x, defaultWeaponVectorPos.localPosition.y);
+        if(defaultWeaponVectorPos != null) tempPosColbackWeaponPos = new Vector2(defaultWeaponVectorPos.localPosition.x, defaultWeaponVectorPos.localPosition.y);
     }
 
     private void FillListParticle()

@@ -121,8 +121,6 @@ public class PlayerPhysicsControl : MonoBehaviour
         hitInfoGroundLeft = Physics2D.Raycast(leftGroundPoint.position, Vector2.down, groundRayDistance, whatToGroundDetected);
         hitInfoGroundRight = Physics2D.Raycast(rightGroundPoint.position, Vector2.down, groundRayDistance, whatToGroundDetected);
 
-
-
         if (hitInfoGroundLeft || hitInfoGroundRight)
             return true;
 
@@ -131,19 +129,27 @@ public class PlayerPhysicsControl : MonoBehaviour
     private void SlopeCheckHorizontal(Vector2 checkPos)
     {
         RaycastHit2D slopHitFront = Physics2D.Raycast(checkPos, transform.right, slopRayHorizontalDistance, whatToSlopDetected);
+        RaycastHit2D slopHitBack = Physics2D.Raycast(checkPos, -transform.right, slopRayHorizontalDistance, whatToSlopDetected);
         if (slopHitFront)
         {
-           // isOnSlope = true;
+            isOnSlope = true;
             slopeSideAngle = Vector2.Angle(slopHitFront.normal, Vector2.up);
+        }
+        else if(slopHitBack)
+        {
+            isOnSlope = true;
+            slopeSideAngle = Vector2.Angle(slopHitBack.normal, Vector2.up);
+            
         }
         else
         {
-           // isOnSlope = false;
+            isOnSlope = false;
             slopeSideAngle = 0.0f;
         }
 
-        Debug.DrawRay(slopHitFront.point, Vector2.Perpendicular(slopHitFront.normal).normalized, Color.yellow);
-        Debug.DrawRay(slopHitFront.point, slopHitFront.normal, Color.magenta);
+        Debug.DrawRay(checkPos, transform.right* slopRayHorizontalDistance, Color.green);
+        Debug.DrawRay(checkPos, -transform.right* slopRayHorizontalDistance, Color.red);
+        
     }
     private void SlopeCheckVectical(Vector2 checkPos)
     {
@@ -151,21 +157,16 @@ public class PlayerPhysicsControl : MonoBehaviour
 
         if (hit)
         {
-            slopeNormalPerp = Vector2.Perpendicular(hit.normal).normalized;
             slopeDownAngle = Vector2.Angle(hit.normal, Vector2.up);
+            slopeNormalPerp = Vector2.Perpendicular(hit.normal).normalized;
+            
 
             if (slopeDownAngle != slopeDownAngleOld)
-            {
                 isOnSlope = true;
-            }
-            else
-            {
-                isOnSlope = false;
-            }
-                //slopeDownAngleOld = slopeDownAngle; ;
+  
 
-            Debug.DrawRay(hit.point, slopeNormalPerp, Color.red);
-            Debug.DrawRay(hit.point, hit.normal, Color.green);
+            Debug.DrawRay(hit.point, slopeNormalPerp, Color.yellow);
+            Debug.DrawRay(hit.point, hit.normal, Color.magenta);
         }
     }
     private bool CheckSlop()
@@ -189,7 +190,7 @@ public class PlayerPhysicsControl : MonoBehaviour
     {
         if (slopeDownAngle > maxSlopAngle || slopeSideAngle > maxSlopAngle)
         {
-            rb.sharedMaterial = frictionOff;
+            
             return false;
         }
         else
@@ -281,7 +282,7 @@ public class PlayerPhysicsControl : MonoBehaviour
 
         //=======Slop==============
         Debug.DrawRay(slopCheckPoint.position, new Vector3(0, -slopRayVerticalDistance, 0), Color.white);
-        Debug.DrawRay(slopCheckPoint.position, new Vector3(slopRayHorizontalDistance, 0, 0), Color.white);
+        //Debug.DrawRay(slopCheckPoint.position, new Vector3(slopRayHorizontalDistance, 0, 0), Color.white);
         //=========================
     }
 }

@@ -51,12 +51,14 @@ public class MoveAbility : BaseAbilityPlayer
         {
             if (!linkedPhysics.canWalkOnSlope)
             {
-                linkedPhysics.rb.linearVelocity = new Vector2(0f, linkedPhysics.rb.linearVelocityY);
+                linkedPhysics.rb.linearVelocity = new Vector2(speed * linkedInput.horizontalInput, 0.0f);
+                
                 return;
             }
             else
             {
                 linkedPhysics.rb.linearVelocity = new Vector2(speed * linkedPhysics.slopeNormalPerp.x * -linkedInput.horizontalInput, speed * linkedPhysics.slopeNormalPerp.y * -linkedInput.horizontalInput);
+                return;
             }
         }
         else

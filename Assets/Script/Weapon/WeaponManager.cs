@@ -1,9 +1,10 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.U2D.IK;
+using System.Linq;
 
 public class WeaponManager : MonoBehaviour
 {
@@ -48,7 +49,7 @@ public class WeaponManager : MonoBehaviour
 
     private int weaponSelect = 0;
 
-    
+
 
     public static Action<Sprite, int, int, int> OnUpdateAllInfo;
 
@@ -222,8 +223,8 @@ public class WeaponManager : MonoBehaviour
     public void DeactivateAllWeapon()
     {
         ActivateWeapon(TypeOfWeapon.Heand);
-       
-        
+
+
     }
 
     public void DeActivateCurrentWeapon()
@@ -247,7 +248,7 @@ public class WeaponManager : MonoBehaviour
         RemoveAllWeaponSolver();
 
         AddAllAnimSolver();
-       
+
 
     }
 
@@ -258,7 +259,7 @@ public class WeaponManager : MonoBehaviour
     {
         ActivateWeapon(tempWeapon);
 
-        
+
     }
 
 
@@ -277,9 +278,7 @@ public class WeaponManager : MonoBehaviour
                 RemoveAllWeaponSolver();
                 RemoveAllAnimSolver();
 
-                AddAnimLeftArmSolver();
-                AddAnimRightArmSolver();
-                SetAnimationHeadSolwer();
+                AddAllAnimSolver();
 
 
                 break;
@@ -325,76 +324,127 @@ public class WeaponManager : MonoBehaviour
 
 
 
+    public void AddSolversAfteReload(TypeOfWeapon wSelect)
+    {
+        switch (wSelect)
+        {
+            case TypeOfWeapon.Heand:
+
+                break;
+            case TypeOfWeapon.Pistol:
+
+                AddAnimLeftArmSolver();
+                AddWeaponRightArmSolver();
+                SetWeaponHeadSolwer();
+
+                break;
+            case TypeOfWeapon.ShotGun:
+
+                AddWeaponLeftArmSolver();
+                AddWeaponRightArmSolver();
+                SetWeaponHeadSolwer();
+
+                break;
+            case TypeOfWeapon.Rifle:
+
+                AddWeaponLeftArmSolver();
+                AddWeaponRightArmSolver();
+                SetWeaponHeadSolwer();
+
+                break;
+        }
+    }
+
+
 
     public void RemoveAllWeaponSolver()
     {
-        _IKManager.RemoveSolver(weaponLeftArmSolver);
-        _IKManager.RemoveSolver(weaponLeftHeandSolver);
 
-        _IKManager.RemoveSolver(weaponRightArmSolver);
-        _IKManager.RemoveSolver(weaponRightHeandSolver);
+        HRemoveSolver(weaponLeftHeandSolver);
 
-        _IKManager.RemoveSolver(weaponHeadSolver);
+        HRemoveSolver(weaponLeftArmSolver);
+
+        HRemoveSolver(weaponRightHeandSolver);
+
+        HRemoveSolver(weaponRightArmSolver);
+
+        HRemoveSolver(weaponHeadSolver);
     }
 
 
     public void RemoveWeaponLeftArmSolver()
     {
-        _IKManager.RemoveSolver(weaponLeftArmSolver);
-        _IKManager.RemoveSolver(weaponLeftHeandSolver);
+
+        HRemoveSolver(weaponLeftHeandSolver);
+        HRemoveSolver(weaponLeftArmSolver);
     }
 
     public void AddWeaponLeftArmSolver()
     {
-        _IKManager.AddSolver(weaponLeftArmSolver);
-        _IKManager.AddSolver(weaponLeftHeandSolver);
+
+        
+        HAddSolver(weaponLeftArmSolver);
+        HAddSolver(weaponLeftHeandSolver);
     }
 
     public void RemoveWeaponRightArmSolver()
     {
 
-        _IKManager.RemoveSolver(weaponRightArmSolver);
-        _IKManager.RemoveSolver(weaponRightHeandSolver);
+
+        HRemoveSolver(weaponRightHeandSolver);
+        HRemoveSolver(weaponRightArmSolver);
     }
 
     public void AddWeaponRightArmSolver()
     {
-        _IKManager.AddSolver(weaponRightArmSolver);
-        _IKManager.AddSolver(weaponRightHeandSolver);
+        
+        HAddSolver(weaponRightHeandSolver);
+        HAddSolver(weaponRightArmSolver);
     }
 
     public void SetWeaponHeadSolwer()
     {
-        _IKManager.RemoveSolver(animHeadSolver);
-        _IKManager.RemoveSolver(weaponHeadSolver);
+        HRemoveSolver(animHeadSolver);
+        HRemoveSolver(weaponHeadSolver);
 
-        _IKManager.solvers.Insert(0, weaponHeadSolver);
+       
+        HAddSolver(weaponHeadSolver);
+
+        // _IKManager.solvers.Insert(0, weaponHeadSolver);
+
+        MoveSolverSafely(weaponHeadSolver);
+
+
     }
 
- 
+
 
 
     ///=================anim solver=======================
     ///
     public void RemoveAllAnimSolver()
     {
-        _IKManager.RemoveSolver(animLeftArmSolver);
-        _IKManager.RemoveSolver(animLeftHeandSolver);
 
-        _IKManager.RemoveSolver(animRightArmSolver);
-        _IKManager.RemoveSolver(animRightHeandSolver);
+        HRemoveSolver(animLeftHeandSolver);
+        HRemoveSolver(animLeftArmSolver);
 
-        _IKManager.RemoveSolver(weaponHeadSolver);
+
+        HRemoveSolver(animRightHeandSolver);
+        HRemoveSolver(animRightArmSolver);
+
+        HRemoveSolver(weaponHeadSolver);
     }
 
 
     public void AddAllAnimSolver()
     {
-        _IKManager.AddSolver(animLeftArmSolver);
-        _IKManager.AddSolver(animLeftHeandSolver);
+        
+        HAddSolver(animLeftHeandSolver);
+        HAddSolver(animLeftArmSolver);
 
-        _IKManager.AddSolver(animRightArmSolver);
-        _IKManager.AddSolver(animRightHeandSolver);
+        
+        HAddSolver(animRightHeandSolver);
+        HAddSolver(animRightArmSolver);
 
         SetAnimationHeadSolwer();
     }
@@ -403,35 +453,46 @@ public class WeaponManager : MonoBehaviour
 
     public void RemoveAnimLeftArmSolver()
     {
-        _IKManager.RemoveSolver(animLeftArmSolver);
-        _IKManager.RemoveSolver(animLeftHeandSolver);
+
+        HRemoveSolver(animLeftHeandSolver);
+        HRemoveSolver(animLeftArmSolver);
     }
 
     public void AddAnimLeftArmSolver()
     {
-        _IKManager.AddSolver(animLeftArmSolver);
-        _IKManager.AddSolver(animLeftHeandSolver);
+
+
+        
+        HAddSolver(animLeftHeandSolver);
+        HAddSolver(animLeftArmSolver);
     }
 
     public void RemoveAnimRightArmSolver()
     {
 
-        _IKManager.RemoveSolver(animRightArmSolver);
-        _IKManager.RemoveSolver(animRightHeandSolver);
+
+        HRemoveSolver(animRightHeandSolver);
+        HRemoveSolver(animRightArmSolver);
     }
 
     public void AddAnimRightArmSolver()
     {
-        _IKManager.AddSolver(animRightArmSolver);
-        _IKManager.AddSolver(animRightHeandSolver);
+
+
+        
+        HAddSolver(animRightHeandSolver);
+        HAddSolver(animRightArmSolver);
     }
 
     public void SetAnimationHeadSolwer()
     {
-        _IKManager.RemoveSolver(animHeadSolver);
-        _IKManager.RemoveSolver(weaponHeadSolver);
+        HRemoveSolver(animHeadSolver);
+        HRemoveSolver(weaponHeadSolver);
 
-        _IKManager.solvers.Insert(0, animHeadSolver);
+        HAddSolver(animHeadSolver);
+        //_IKManager.solvers.Insert(0, animHeadSolver);
+        MoveSolverSafely(animHeadSolver);
+
     }
 
 
@@ -443,30 +504,75 @@ public class WeaponManager : MonoBehaviour
         {
             case TypeOfWeapon.Heand:
 
-                
+
                 _animator.SetLayerWeight(_animator.GetLayerIndex("Weapon"), 0);
 
                 break;
             case TypeOfWeapon.Pistol:
 
-               
+
                 _animator.SetLayerWeight(_animator.GetLayerIndex("Weapon"), 1);
                 _animator.SetFloat("WeaponType", (float)TypeOfWeapon.Pistol);
                 break;
             case TypeOfWeapon.ShotGun:
-                
+
                 _animator.SetLayerWeight(_animator.GetLayerIndex("Weapon"), 1);
                 _animator.SetFloat("WeaponType", (float)TypeOfWeapon.ShotGun);
 
                 break;
             case TypeOfWeapon.Rifle:
-               
+
                 _animator.SetLayerWeight(_animator.GetLayerIndex("Weapon"), 1);
                 _animator.SetFloat("WeaponType", (float)TypeOfWeapon.Rifle);
                 break;
         }
 
 
-        
-     }
+
+    }
+
+
+    public void HRemoveSolver(Solver2D s)
+    {
+        _IKManager.RemoveSolver(s);
+       // Debug.Log($"Removed solver: {s.name}");
+    }
+
+    public void HAddSolver(Solver2D s)
+    {
+        _IKManager.AddSolver(s);
+       // Debug.Log($"Add solver: {s.name}");
+    }
+
+
+
+    public void MoveSolverSafely(Solver2D targetSolver)
+    {
+        // 1. Создаем копию текущего списка солверов
+        List<Solver2D> currentSolvers = _IKManager.solvers.ToList();
+
+        if (currentSolvers.Contains(targetSolver))
+        {
+            // 2. Очищаем оригинальный список в IK Manager'е
+            _IKManager.solvers.Clear();
+
+            // 3. Удаляем целевой солвер из временной копии списка
+            currentSolvers.Remove(targetSolver);
+
+            // 4. Добавляем целевой солвер первым в оригинальный список
+            _IKManager.solvers.Add(targetSolver);
+
+            // 5. Добавляем остальные солверы из временной копии обратно в список менеджера
+            foreach (Solver2D solver in currentSolvers)
+            {
+                _IKManager.solvers.Add(solver);
+            }
+
+            //Debug.Log($"Solver {targetSolver.name} safely moved to the top position.");
+        }
+        else
+        {
+            Debug.LogWarning($"Solver {targetSolver.name} not found in the IK Manager list.");
+        }
+    }
 }

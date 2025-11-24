@@ -22,7 +22,7 @@ public class IdleAbility : BaseAbilityPlayer
         if (!isParamited)
             return;
 
-        if (linkedPhysics.wallDetected == true)
+        if (linkedPhysics.wallDetected == true )
              return;
  
 
