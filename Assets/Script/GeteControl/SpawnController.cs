@@ -40,10 +40,11 @@ public class SpawnController : MonoBehaviour
     }
     void Start()
     {
-        // only for start game
-        //ServiceLocator.Current.Get<SaveLoadManager>().DelitFolder(ServiceLocator.Current.Get<SaveLoadManager>().folderName);
+       // only for start game
 
-        player = FindAnyObjectByType<Player>().transform;
+      // ServiceLocator.Current.Get<SaveLoadManager>().DelitFolder(ServiceLocator.Current.Get<SaveLoadManager>().folderName);
+
+       player = FindAnyObjectByType<Player>().transform;
 
         string loadPath = Path.Combine(Application.persistentDataPath, 
             ServiceLocator.Current.Get<SaveLoadManager>().folderName,
