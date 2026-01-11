@@ -65,7 +65,7 @@ private Vector3 velocity;
             offHandIKLCCD.position = _LCCDPoint.position;
     }
 
-    private void Update()
+    private void LateUpdate()
     {
 
         OffHeandUptatePoint();

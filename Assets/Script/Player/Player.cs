@@ -14,7 +14,11 @@ public class Player : Entety
 
     private float vievDirection;
 
-  
+   // readonly Quaternion flippedRotation = new Quaternion(0, -180, 0, 0);
+
+    //[Header("Tail")]
+    //[SerializeField] Transform tailAnchor = null;
+    //[SerializeField] Rigidbody2D tailRigidbody = null;
 
     private void Awake()
     {
@@ -32,6 +36,19 @@ public class Player : Entety
             vievDirection = -1;
 
     }
+
+    //private void UpdateTailPose()
+    //{
+    //    // Calculate the extrapolated target position of the tail anchor.
+    //    Vector2 targetPosition = tailAnchor.position;
+    //    targetPosition += physicsControl.rb.linearVelocity * Time.fixedDeltaTime;
+
+    //    tailRigidbody.MovePosition(targetPosition);
+    //    if (facingRight)
+    //        tailRigidbody.SetRotation(tailAnchor.rotation * flippedRotation);
+    //    else
+    //        tailRigidbody.SetRotation(tailAnchor.rotation);
+    //}
 
     private void Update()
     {
@@ -62,6 +79,7 @@ public class Player : Entety
             }
         }
 
+      //  UpdateTailPose();
     }
 
 

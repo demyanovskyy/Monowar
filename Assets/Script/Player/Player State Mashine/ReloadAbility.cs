@@ -62,7 +62,7 @@ public class ReloadAbility : BaseAbilityPlayer
         // add weapon solver
         weaponManager.AddSolversAfteReload(currentWeapon.weaponType);
 
-        player.animator.SetLayerWeight(player.animator.GetLayerIndex("Weapon"), 0);
+        weaponManager.SetAnimator(currentWeapon.weaponType);
 
         player.rotateObject.DeActivateFrizeRotate();
         

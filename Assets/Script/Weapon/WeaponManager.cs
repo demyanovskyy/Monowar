@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using Unity.VisualScripting;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.U2D.IK;
-using System.Linq;
 
 public class WeaponManager : MonoBehaviour
 {
@@ -382,7 +381,7 @@ public class WeaponManager : MonoBehaviour
     public void AddWeaponLeftArmSolver()
     {
 
-        
+
         HAddSolver(weaponLeftArmSolver);
         HAddSolver(weaponLeftHeandSolver);
     }
@@ -397,7 +396,7 @@ public class WeaponManager : MonoBehaviour
 
     public void AddWeaponRightArmSolver()
     {
-        
+
         HAddSolver(weaponRightHeandSolver);
         HAddSolver(weaponRightArmSolver);
     }
@@ -407,7 +406,7 @@ public class WeaponManager : MonoBehaviour
         HRemoveSolver(animHeadSolver);
         HRemoveSolver(weaponHeadSolver);
 
-       
+
         HAddSolver(weaponHeadSolver);
 
         // _IKManager.solvers.Insert(0, weaponHeadSolver);
@@ -438,13 +437,14 @@ public class WeaponManager : MonoBehaviour
 
     public void AddAllAnimSolver()
     {
-        
-        HAddSolver(animLeftHeandSolver);
-        HAddSolver(animLeftArmSolver);
 
-        
-        HAddSolver(animRightHeandSolver);
+
+        HAddSolver(animLeftArmSolver);
+        HAddSolver(animLeftHeandSolver);
+
+
         HAddSolver(animRightArmSolver);
+        HAddSolver(animRightHeandSolver);
 
         SetAnimationHeadSolwer();
     }
@@ -462,9 +462,9 @@ public class WeaponManager : MonoBehaviour
     {
 
 
-        
-        HAddSolver(animLeftHeandSolver);
         HAddSolver(animLeftArmSolver);
+        HAddSolver(animLeftHeandSolver);
+
     }
 
     public void RemoveAnimRightArmSolver()
@@ -479,9 +479,9 @@ public class WeaponManager : MonoBehaviour
     {
 
 
-        
-        HAddSolver(animRightHeandSolver);
         HAddSolver(animRightArmSolver);
+        HAddSolver(animRightHeandSolver);
+
     }
 
     public void SetAnimationHeadSolwer()
@@ -496,7 +496,7 @@ public class WeaponManager : MonoBehaviour
     }
 
 
-    private void SetAnimator(TypeOfWeapon wSelect)
+    public void SetAnimator(TypeOfWeapon wSelect)
     {
 
 
@@ -535,13 +535,13 @@ public class WeaponManager : MonoBehaviour
     public void HRemoveSolver(Solver2D s)
     {
         _IKManager.RemoveSolver(s);
-       // Debug.Log($"Removed solver: {s.name}");
+        // Debug.Log($"Removed solver: {s.name}");
     }
 
     public void HAddSolver(Solver2D s)
     {
         _IKManager.AddSolver(s);
-       // Debug.Log($"Add solver: {s.name}");
+        // Debug.Log($"Add solver: {s.name}");
     }
 
 

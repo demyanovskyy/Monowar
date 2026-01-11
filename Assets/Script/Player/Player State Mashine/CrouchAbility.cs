@@ -55,9 +55,9 @@ public class CrouchAbility : BaseAbilityPlayer
             || linkedStateMachine.curentState == (int)PlayerStates.State.Death)
             return;
 
-        if (linkedPhysics.grounded == false 
+        if (linkedPhysics.grounded == false
             || linkedStateMachine.curentState == (int)PlayerStates.State.Dash
-            || linkedStateMachine.curentState == (int)PlayerStates.State.Ladder 
+            || linkedStateMachine.curentState == (int)PlayerStates.State.Ladder
             || linkedStateMachine.curentState == (int)PlayerStates.State.Reload)
             return;
 
@@ -71,7 +71,7 @@ public class CrouchAbility : BaseAbilityPlayer
         if (!isParamited || linkedStateMachine.curentState == (int)PlayerStates.State.KnockBack)
             return;
 
-        if (linkedStateMachine.curentState != (int)PlayerStates.State.Crouch) 
+        if (linkedStateMachine.curentState != (int)PlayerStates.State.Crouch)
             return;
 
         if (linkedPhysics.ceilingDetected)
@@ -109,13 +109,31 @@ public class CrouchAbility : BaseAbilityPlayer
 
     public override void ProcessFixedAbility()
     {
+        //if (linkedPhysics.grounded)
+        //    linkedPhysics.rb.linearVelocity = new Vector2(linkedInput.horizontalInput * crouchSpeed, linkedPhysics.rb.linearVelocityY);
+
         if (linkedPhysics.grounded)
-            linkedPhysics.rb.linearVelocity = new Vector2(linkedInput.horizontalInput * crouchSpeed, linkedPhysics.rb.linearVelocityY);
+            if (linkedPhysics.slopDetected)
+            {
+                if (!linkedPhysics.canWalkOnSlope)
+                {
+                    linkedPhysics.rb.linearVelocity = new Vector2(crouchSpeed * linkedInput.horizontalInput, 0.0f);
+
+                    return;
+                }
+                else
+                {
+                    linkedPhysics.rb.linearVelocity = new Vector2(crouchSpeed * linkedPhysics.slopeNormalPerp.x * -linkedInput.horizontalInput, crouchSpeed * linkedPhysics.slopeNormalPerp.y * -linkedInput.horizontalInput);
+                    return;
+                }
+            }
+            else
+                linkedPhysics.rb.linearVelocity = new Vector2(crouchSpeed * linkedInput.horizontalInput, linkedPhysics.rb.linearVelocityY);
     }
 
     public override void UpdateAnimator()
     {
-         // linkedAnimator.SetFloat(xSpeedParamiterID, Mathf.Abs(linkedPhysics.rb.linearVelocityX));
+        // linkedAnimator.SetFloat(xSpeedParamiterID, Mathf.Abs(linkedPhysics.rb.linearVelocityX));
         if ((player.facingRight))
         {
             linkedAnimator.SetFloat(xSpeedParamiterID, linkedInput.horizontalInput);

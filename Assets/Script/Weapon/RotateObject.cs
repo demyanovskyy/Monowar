@@ -60,22 +60,18 @@ public class RotateObject : MonoBehaviour
 
 
 
-
-    private void Update()
+    private void LateUpdate()
     {
-
         if (frizeRotateArm)
         {
-            float armAngle = 0;
-
-            armAngle = Mathf.Clamp(armAngle, armMinAngle, armMaxAngle);
+            armAngle = 0;
 
             if (viewDirection == 1)
                 rotZ = Quaternion.Euler(0f, 0f, armAngle + offset);
             else
                 rotZ = Quaternion.Euler(0f, 180f, armAngle + offset);
 
-            rotateObjectTransform.rotation = Quaternion.Slerp(rotateObjectTransform.rotation, rotZ, speedRotateAim * Time.deltaTime);
+            rotateObjectTransform.rotation = rotZ;
 
         }
         else
@@ -83,9 +79,9 @@ public class RotateObject : MonoBehaviour
             //=======================================================================================================================
             Vector3 direction = mousePosMain - rotateObjectTransform.position;
 
-            float armAngle = Mathf.Atan2(direction.y, direction.x * viewDirection) * Mathf.Rad2Deg;
+            float armDir = Mathf.Atan2(direction.y, direction.x * viewDirection) * Mathf.Rad2Deg;
 
-            armAngle = Mathf.Clamp(armAngle, armMinAngle, armMaxAngle);
+            armAngle = Mathf.Clamp(armDir, armMinAngle, armMaxAngle);
 
             if (viewDirection == 1)
                 rotZ = Quaternion.Euler(0f, 0f, armAngle + offset);
@@ -93,15 +89,22 @@ public class RotateObject : MonoBehaviour
                 rotZ = Quaternion.Euler(0f, 180f, armAngle + offset);
 
             rotateObjectTransform.rotation = Quaternion.Slerp(rotateObjectTransform.rotation, rotZ, speedRotateAim * Time.deltaTime);
+        }
 
-            //=======================================================================================================================
-            if (_weaponManager.ReturnCurrentWeapon() != null)
+
+        if (_weaponManager.ReturnCurrentWeapon() != null && _weaponManager.ReturnCurrentWeapon().isReloading == false)
+        {
+            if (frizeRotateGun)
+            {
+                _weaponManager.ReturnCurrentWeapon().transform.rotation = rotateObjectTransform.rotation;
+            }
+            else
             {
                 Vector3 directionGun = mousePosMain - _weaponManager.ReturnCurrentWeapon().transform.position;
 
-                gunAngle = Mathf.Atan2(directionGun.y, directionGun.x * viewDirection) * Mathf.Rad2Deg;
+                float gunDir = Mathf.Atan2(directionGun.y, directionGun.x * viewDirection) * Mathf.Rad2Deg;
 
-                gunAngle = Mathf.Clamp(gunAngle, armAngle + gunMinAngle, armAngle + gunMaxAngle);
+                gunAngle = Mathf.Clamp(gunDir, armAngle + gunMinAngle, armAngle + gunMaxAngle);
 
                 if (viewDirection == 1)
                     rotZGun = Quaternion.Euler(0f, 0f, gunAngle + offsetGun);
@@ -110,24 +113,25 @@ public class RotateObject : MonoBehaviour
 
                 _weaponManager.ReturnCurrentWeapon().transform.rotation = Quaternion.Slerp(_weaponManager.ReturnCurrentWeapon().transform.rotation, rotZGun, speedRotateGun * Time.deltaTime);
             }
-            //=======================================================================================================================
-
-            //====Flip Arm===========================================================================================================
-
-            Vector3 _locatScale = Vector3.one;
-
-            if (armAngle > 90 || armAngle < -90)
-            {
-                _locatScale.y = -1f;
-            }
-            else
-            {
-                _locatScale.y = 1f;
-            }
-
-            rotateObjectTransform.localScale = _locatScale;
-
         }
-    } 
+        //=======================================================================================================================
 
+        //====Flip Arm===========================================================================================================
+
+        Vector3 _locatScale = Vector3.one;
+
+        if (armAngle > 90 || armAngle < -90)
+        {
+            _locatScale.y = -1f;
+        }
+        else
+        {
+            _locatScale.y = 1f;
+        }
+
+        rotateObjectTransform.localScale = _locatScale;
+
+    }
 }
+
+
